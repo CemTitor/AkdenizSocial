@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:senior_design_project/screens/signup/widgets/snackbar.dart';
+import 'package:senior_design_project/services/auth.dart';
+import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/theme.dart';
+import 'package:email_validator/email_validator.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
-
+class SignUp extends StatefulWidget with ChangeNotifier {
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -105,7 +107,7 @@ class _SignUpState extends State<SignUp> {
                               FontAwesomeIcons.envelope,
                               color: Colors.black,
                             ),
-                            hintText: 'Email Address',
+                            hintText: 'Email Address(ogr.akdeniz.edu.tr)',
                             hintStyle: TextStyle(
                                 fontFamily: 'WorkSansSemiBold', fontSize: 16.0),
                           ),
@@ -256,6 +258,48 @@ class _SignUpState extends State<SignUp> {
 
   void _toggleSignUpButton() {
     CustomSnackBar(context, const Text('SignUp button pressed'));
+    if (signupPasswordController.text.length < 6) {
+      warningText(context, "Passwod cannot be less than 6 characters !");
+    } else if (signupEmailController.text.isEmpty ||
+        signupNameController.text.isEmpty) {
+      warningText(context, "Fill all feilds !");
+    } else if (!EmailValidator.validate(signupEmailController.text)) {
+      warningText(context, "Enter a valid Email");
+    } else if (!signupEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
+      warningText(context, 'You should use Akdeniz Ogrenci Mail');
+    } else if (signupPasswordController.text !=
+        signupConfirmPasswordController.text) {
+      warningText(context, "Passwors has to be matched");
+    } else if (signupEmailController.text.isNotEmpty) {
+      Provider.of<Authentication>(context, listen: false)
+          .createAccount(
+              signupEmailController.text, signupPasswordController.text)
+          .whenComplete(() async {
+        print("Creating collection");
+        await Provider.of<FirebaseOpertrations>(context, listen: false)
+            .createUserCollection(context, {
+          'useruid':
+              Provider.of<Authentication>(context, listen: false).getUserid,
+          'useremail': signupEmailController.text,
+          'userpassword': signupPasswordController.text,
+          'username': signupNameController.text,
+          // 'userimage':
+          //     Provider.of<WelcomeUtils>(context, listen: false).getuserAvatarUrl
+        });
+      }).whenComplete(() {
+        signupPasswordController.clear();
+        signupConfirmPasswordController.clear();
+        signupNameController.clear();
+        signupEmailController.clear();
+        // if user successfully singsup
+        if (Authentication.successSignup == true) {
+          Navigator.pushNamed(context, 'verify');
+        } //if there is an error
+        else {
+          warningText(context, "SignUp Unsuccessful Check details again");
+        }
+      });
+    }
   }
 
   void _toggleSignup() {
@@ -268,5 +312,27 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       _obscureTextConfirmPassword = !_obscureTextConfirmPassword;
     });
+  }
+
+  warningText(BuildContext context, String warning) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: CustomTheme.black,
+                  borderRadius: BorderRadius.circular(15.0)),
+              height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.width,
+              child: Center(
+                child: Text(
+                  warning,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              ));
+        });
   }
 }

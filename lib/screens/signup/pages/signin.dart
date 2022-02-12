@@ -1,10 +1,14 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:senior_design_project/screens/signup/pages/verify.dart';
 import 'package:senior_design_project/screens/signup/widgets/snackbar.dart';
+import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/theme.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class SignIn extends StatefulWidget with ChangeNotifier {
+  SignIn({Key? key}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -160,8 +164,7 @@ class _SignInState extends State<SignIn> {
                           fontFamily: 'WorkSansBold'),
                     ),
                   ),
-                  onPressed: () => CustomSnackBar(
-                      context, const Text('Login button pressed')),
+                  onPressed: () => _toggleSignInButton(),
                 ),
               )
             ],
@@ -209,6 +212,57 @@ class _SignInState extends State<SignIn> {
 
   void _toggleSignInButton() {
     CustomSnackBar(context, const Text('Login button pressed'));
+    if (loginEmailController.text.isNotEmpty) {
+      if (!EmailValidator.validate(loginEmailController.text)) {
+        warningText(context, "Please enter a valid email");
+      }
+      // else if (!loginEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
+      //   warningText(context, 'You should use Akdeniz Ogrenci Mail');
+      // }
+      else {
+        Provider.of<Authentication>(context, listen: false)
+            .logIntoAccount(
+                loginEmailController.text, loginPasswordController.text)
+            .whenComplete(() {
+          loginEmailController.clear();
+          loginPasswordController.clear();
+          // validation if the Credentials are correct
+          if (Authentication.successLogin == true &&
+              Authentication.verifiedMail == true) {
+            Navigator.pushNamed(context, 'feed2');
+          } else if (Authentication.verifiedMail == false) {
+            warningText(
+                context, 'Please try again after verifying your email.');
+          } else {
+            warningText(context, "Incorrect Email or Password ! Try Again");
+          }
+        });
+      }
+    } else {
+      warningText(context, "Fill all feilds !");
+    }
+  }
+
+  warningText(BuildContext context, String warning) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: CustomTheme.black,
+                  borderRadius: BorderRadius.circular(15.0)),
+              height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.width,
+              child: Center(
+                child: Text(
+                  warning,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              ));
+        });
   }
 
   void _toggleLogin() {
