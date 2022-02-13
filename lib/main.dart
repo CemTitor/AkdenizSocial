@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:senior_design_project/screens/feed/feed.dart';
+import 'package:senior_design_project/screens/feed/feed_view.dart';
+import 'package:senior_design_project/screens/feed/feed_service.dart';
 import 'package:senior_design_project/screens/pageview.dart';
 import 'package:senior_design_project/screens/signup/pages/login.dart';
 import 'package:senior_design_project/screens/signup/pages/signup.dart';
 import 'package:senior_design_project/screens/signup/pages/verify.dart';
-import 'package:senior_design_project/screens/upload_post/upload_post_widget.dart';
 import 'package:senior_design_project/screens/welcome/welcome.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FirebaseOpertrations()),
         ChangeNotifierProvider(create: (_) => UploadPost()),
         ChangeNotifierProvider(create: (_) => Counter()),
+        ChangeNotifierProvider(create: (_) => FeedServices()),
       ],
       child: MaterialApp(
         navigatorKey: AppRouter.navigatorKey,

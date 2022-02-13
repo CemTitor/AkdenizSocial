@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class Counter extends ChangeNotifier {
   int _currentStep = 0;
-  bool isCompleted = false;
 
   int get counter {
     return _currentStep;

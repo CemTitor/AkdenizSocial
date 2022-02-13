@@ -8,11 +8,13 @@ extension ContextExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
 }
 
+// kullanırken context.lowValue
 extension NumberExtension on BuildContext {
-  double get lowValue => dynamicHeight(0.01);
-  double get mediumValue => dynamicHeight(0.03);
+  double get value1 => dynamicHeight(0.01);
+  double get value2 => dynamicHeight(0.02);
+  double get value3 => dynamicHeight(0.03);
 }
 
 extension PaddingExtension on BuildContext {
-  EdgeInsets get paddingAllow => EdgeInsets.all(mediumValue);
+  EdgeInsets get paddingAllow => EdgeInsets.all(value2);
 }

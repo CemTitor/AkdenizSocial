@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +6,10 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
-import 'package:senior_design_project/screens/feed/view_post_screen.dart';
+import 'package:senior_design_project/screens/feed/post_view.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/theme.dart';
-
-import '../../services/upload_post_firebase.dart';
 import '../pageview.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -302,188 +299,138 @@ class _FeedScreenState extends State<FeedScreen> {
       children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
         // Provider.of<PostFunctions>(context, listen: false)
         //     .showTimeAgo(documentSnapshot['time']);
-        return Stack(alignment: Alignment.topLeft,
-            // fit: StackFit.expand,
+        return Padding(
+          padding: context.paddingAllow,
+          child: Stack(
+            alignment: Alignment.topLeft,
             children: <Widget>[
-              Image.network(documentSnapshot['postimage'].toString()),
+              InkWell(
+                onDoubleTap: () => print('Like post'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PostScreen(
+                        snapshot: documentSnapshot,
+                        docID: documentSnapshot['caption'].toString(),
+                      ),
+                    ),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20), // Image border
+                  child: Image.network(
+                    documentSnapshot['postimage'].toString(),
+                    // fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               //TODO cachednetwork for fast loading image
               // CachedNetworkImage(
               //   imageUrl: documentSnapshot!['postimage'],
               // ),
               Positioned(
-                bottom: 10,
-                child: Row(
-                  children: const [
-                    Text('Row1'),
-                  ],
+                child: Expanded(
+                  child: ListTile(
+                    leading: Container(
+                      width: 50.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black45,
+                            offset: Offset(0, 2),
+                            blurRadius: 6.0,
+                          ),
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        child: ClipOval(
+                          child: Image(
+                            height: 50.0,
+                            width: 50.0,
+                            image: AssetImage('assets/images/01.jpg'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      documentSnapshot['username'].toString(),
+                    ),
+                    subtitle: Text('Location'),
+                    trailing: Icon(Icons.more_vert),
+                  ),
                 ),
               ),
               Positioned(
-                child: Row(
-                  children: const [
-                    Text('Row2'),
-                  ],
-                ),
-              ),
-            ]);
-      }).toList(),
-    );
-  }
-
-  Widget loadposts2(
-      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    return ListView(
-      children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
-        // Provider.of<PostFunctions>(context, listen: false)
-        //     .showTimeAgo(documentSnapshot['time']);
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-          child: Container(
-            height: context.dynamicHeight(0.7),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  child: Column(
+                bottom: 10,
+                left: context.dynamicWidth(0.16),
+                child: Card(
+                  color: Colors.white24,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  elevation: 12,
+                  child: Row(
                     children: <Widget>[
-                      ListTile(
-                        leading: Container(
-                          width: 50.0,
-                          height: 50.0,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black45,
-                                offset: Offset(0, 2),
-                                blurRadius: 6.0,
-                              ),
-                            ],
-                          ),
-                          // child: CircleAvatar(
-                          //   child: ClipOval(
-                          //     child: Image(
-                          //       height: 50.0,
-                          //       width: 50.0,
-                          //       image: AssetImage(posts[index].authorImageUrl),
-                          //       fit: BoxFit.cover,
-                          //     ),
-                          //   ),
-                          // ),
-                        ),
-                        title: Text(
-                          documentSnapshot['caption'].toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        // subtitle: Text(documentSnapshot['caption'].timeAgo),
-                        trailing: IconButton(
-                          icon: Icon(Icons.more_horiz),
-                          color: Colors.black,
-                          onPressed: () => print('More'),
+                      IconButton(
+                        icon: Icon(Icons.favorite_border),
+                        iconSize: 30.0,
+                        onPressed: () => print('Like post'),
+                      ),
+                      Text(
+                        '2,515',
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      InkWell(
-                        onDoubleTap: () => print('Like post'),
-                        // onTap: () {
+                      IconButton(
+                        icon: Icon(Icons.chat),
+                        iconSize: 30.0,
+                        onPressed: null,
+                        // onPressed: () {
                         //   Navigator.push(
                         //     context,
                         //     MaterialPageRoute(
                         //       builder: (_) => ViewPostScreen(
-                        //         post: posts[index],
-                        //       ),
+                        //           // post: posts[index],
+                        //           ),
                         //     ),
                         //   );
                         // },
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(20), // Image border
-                          child: SizedBox.fromSize(
-                            size: Size.fromRadius(150), // Image radius
-                            child: Image.network(
-                                documentSnapshot['postimage'].toString(),
-                                fit: BoxFit.cover),
-                          ),
+                      ),
+                      Text(
+                        '350',
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(Icons.favorite_border),
-                                      iconSize: 30.0,
-                                      onPressed: () => print('Like post'),
-                                    ),
-                                    Text(
-                                      '2,515',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(width: 20.0),
-                                Row(
-                                  children: <Widget>[
-                                    IconButton(
-                                        icon: Icon(Icons.chat),
-                                        iconSize: 30.0,
-                                        onPressed: null
-                                        // ()
-                                        // {
-                                        //                                   Navigator.push(
-                                        //                                     context,
-                                        //                                     MaterialPageRoute(
-                                        //                                       builder: (_) => ViewPostScreen(
-                                        //                                         post: posts[index],
-                                        //                                       ),
-                                        //                                     ),
-                                        //                                   );
-                                        //                                 },
-                                        ),
-                                    Text(
-                                      '350',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.bookmark_border),
-                              iconSize: 30.0,
-                              onPressed: () => print('Save post'),
-                            ),
-                          ],
-                        ),
+                      IconButton(
+                        icon: Icon(Icons.share),
+                        iconSize: 30.0,
+                        onPressed: () => print('Share post'),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.bookmark_border),
+                        iconSize: 30.0,
+                        onPressed: () => print('Save post'),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       }).toList(),
     );
   }
 
-  Container storyPart(BuildContext context) {
+  Widget storyPart(BuildContext context) {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.1,
@@ -513,7 +460,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 child: Image(
                   height: 60.0,
                   width: 60.0,
-                  image: AssetImage(stories[index - 1]),
+                  image: AssetImage(stories[index - 1].toString()),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -524,3 +471,14 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 }
+
+List stories = [
+  'dsadsa',
+  'dsadsa',
+  'dsadsa',
+  'dsadsa',
+  'dsadsa',
+  'dsadsa',
+  'dsadsa',
+  'dsadsa',
+];

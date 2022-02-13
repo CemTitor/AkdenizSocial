@@ -57,8 +57,8 @@ class FirebaseOpertrations with ChangeNotifier {
         .get()
         .then((doc) {
       print("Fetching user data");
-      initUserEmail = doc.data()!['username'];
-      initUserName = doc.data()!['useremail'];
+      initUserEmail = doc.data()!['useremail'];
+      initUserName = doc.data()!['username'];
       initUserImage = doc.data()!['userimage'];
       print(initUserName);
       print(initUserEmail);
