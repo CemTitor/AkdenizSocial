@@ -229,7 +229,7 @@ class _SignInState extends State<SignIn> {
           // validation if the Credentials are correct
           if (Authentication.successLogin == true &&
               Authentication.verifiedMail == true) {
-            Navigator.pushNamed(context, 'feed2');
+            Navigator.pushNamed(context, 'pageview');
           } else if (Authentication.verifiedMail == false) {
             warningText(
                 context, 'Please try again after verifying your email.');

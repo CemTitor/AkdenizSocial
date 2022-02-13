@@ -85,7 +85,7 @@ class FirebaseOpertrations with ChangeNotifier {
         .update(data);
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchPostsByTime() {
+  Stream<QuerySnapshot> fetchPostsByTime() {
     return FirebaseFirestore.instance
         .collection('posts')
         .orderBy('time', descending: true)

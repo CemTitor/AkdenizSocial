@@ -12,6 +12,7 @@ import 'package:senior_design_project/services/upload_post_firebase.dart';
 import 'package:senior_design_project/theme.dart';
 
 //TODO bu classı stateles yaparak çalıştırmayı denedim ama olmadı, geçici olarak stateful yapıcam
+//TODO make control for stepping up,down
 class UploadPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -100,7 +101,7 @@ class UploadPostScreen extends StatelessWidget {
                 children: [
                   if (Provider.of<UploadPost>(context).getUploadPostImage ==
                       null)
-                    Text('Boş')
+                    const Placeholder()
                   else
                     Image.file(
                       Provider.of<UploadPost>(context, listen: false)

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
+import 'package:senior_design_project/screens/pageview.dart';
 
 class VerifyScreen extends StatefulWidget {
   @override
@@ -50,7 +51,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      // AppRouter.push(FeedScreen());
+      AppRouter.push(AppPageView());
 
       // navigatorKey.currentState!.pushNamed('feed');
       // Navigator.pushNamed(context, 'feed');
