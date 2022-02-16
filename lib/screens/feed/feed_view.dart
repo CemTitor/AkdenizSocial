@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
 import 'package:senior_design_project/screens/feed/post_view.dart';
+import 'package:senior_design_project/screens/my_profile/my_profile.dart';
+import 'package:senior_design_project/screens/user_profile/profile1.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/theme.dart';
@@ -79,7 +81,22 @@ class _FeedScreenState extends State<FeedScreen> {
             icon: const Icon(Icons.place),
           ),
           Icon(Icons.notifications, size: 30),
-          Icon(Icons.person, size: 30),
+          IconButton(
+            icon: CircleAvatar(
+              radius: 35.0,
+              backgroundColor: Colors.blueGrey,
+              backgroundImage: NetworkImage(Provider.of<FirebaseOpertrations>(
+                          context,
+                          listen: false)
+                      .getInitUserImage ??
+                  "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg"),
+            ),
+            onPressed: () {
+              AppRouter.push(
+                MyProfile(),
+              );
+            },
+          ),
         ],
         onTap: (index) {
           //Handle button tap
@@ -345,13 +362,27 @@ class _FeedScreenState extends State<FeedScreen> {
                           ),
                         ],
                       ),
-                      child: CircleAvatar(
-                        child: ClipOval(
-                          child: Image(
-                            height: 50.0,
-                            width: 50.0,
-                            image: AssetImage('assets/images/01.jpg'),
-                            fit: BoxFit.cover,
+                      child: GestureDetector(
+                        onTap: () {
+                          if (documentSnapshot['useruid'] !=
+                              Provider.of<Authentication>(context,
+                                      listen: false)
+                                  .getUserid) {
+                            AppRouter.push(
+                              UserProfile(
+                                userUid: documentSnapshot['useruid'].toString(),
+                              ),
+                            );
+                          }
+                        },
+                        child: CircleAvatar(
+                          child: ClipOval(
+                            child: Image(
+                              height: 50.0,
+                              width: 50.0,
+                              image: AssetImage('assets/images/01.jpg'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
