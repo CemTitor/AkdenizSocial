@@ -15,7 +15,9 @@ import 'package:senior_design_project/screens/upload_post/counter_for_stepper.da
 import 'package:senior_design_project/theme.dart';
 
 import 'constants(config)/app_router.dart';
+import 'screens/my_profile/my_profile_services.dart';
 import 'screens/signup/pages/signin.dart';
+import 'screens/user_profile/user_profile_service.dart';
 
 Future<void> main() async {
   //following tho method for firebase initiliazing
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UploadPost()),
         ChangeNotifierProvider(create: (_) => Counter()),
         ChangeNotifierProvider(create: (_) => FeedServices()),
+        ChangeNotifierProvider(create: (_) => ProfileService()),
+        ChangeNotifierProvider(create: (_) => MyProfileServices()),
       ],
       child: MaterialApp(
         navigatorKey: AppRouter.navigatorKey,

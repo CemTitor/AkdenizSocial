@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_design_project/constants(config)/context_extension.dart';
 import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
@@ -16,7 +15,6 @@ import 'package:senior_design_project/theme.dart';
 class UploadPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Counter counterBloc = Provider.of<Counter>(context);
     // int currentStep = Provider.of<CounterBloc>(context, listen: false).counter;
 
     return Scaffold(
@@ -35,7 +33,8 @@ class UploadPostScreen extends StatelessWidget {
       ),
       body: Theme(
         data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.light(primary: CustomTheme.loginGradientEnd),
+          colorScheme:
+              ColorScheme.light(primary: CustomTheme.loginGradientStart),
         ),
         child: Stepper(
           type: StepperType.horizontal,

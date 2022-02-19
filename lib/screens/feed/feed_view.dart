@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
 import 'package:senior_design_project/screens/feed/post_view.dart';
-import 'package:senior_design_project/screens/my_profile/my_profile.dart';
-import 'package:senior_design_project/screens/user_profile/profile1.dart';
+import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
+import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/theme.dart';
@@ -86,9 +86,9 @@ class _FeedScreenState extends State<FeedScreen> {
               radius: 35.0,
               backgroundColor: Colors.blueGrey,
               backgroundImage: NetworkImage(Provider.of<FirebaseOpertrations>(
-                          context,
-                          listen: false)
-                      .getInitUserImage ??
+                    context,
+                    listen: false,
+                  ).getInitUserImage ??
                   "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg"),
             ),
             onPressed: () {
@@ -120,21 +120,19 @@ class _FeedScreenState extends State<FeedScreen> {
                     if (documentSnapshot['useruid'] !=
                         Provider.of<Authentication>(context, listen: false)
                             .getUserid) {
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     PageTransition(
-                      //         child: UserProfile(
-                      //           userUid: documentSnapshot['useruid'],
-                      //         ),
-                      //         type: PageTransitionType.bottomToTop));
+                      AppRouter.push(
+                        UserProfile(
+                          userUid: documentSnapshot['useruid'].toString(),
+                        ),
+                      );
                     }
                   },
-                  // child: CircleAvatar(
-                  //   backgroundColor: Colors.blueGrey,
-                  //   radius: 20.0,
-                  //   backgroundImage:
-                  //       NetworkImage(documentSnapshot!['userimage']),
-                  // ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.blueGrey,
+                    radius: 20.0,
+                    backgroundImage:
+                        NetworkImage(documentSnapshot['userimage'].toString()),
+                  ),
                 ),
                 Container(
                   height: 50.0,
@@ -170,16 +168,6 @@ class _FeedScreenState extends State<FeedScreen> {
                   ),
                 ),
               ],
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.46,
-              width: MediaQuery.of(context).size.width,
-              child: FittedBox(
-                child: Image.network(
-                  documentSnapshot['postimage'].toString(),
-                  scale: 2,
-                ),
-              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -284,7 +272,6 @@ class _FeedScreenState extends State<FeedScreen> {
                     ],
                   ),
                 ),
-                Spacer(),
                 Provider.of<Authentication>(context, listen: false).getUserid ==
                         documentSnapshot['useruid']
                     ? IconButton(
@@ -321,27 +308,7 @@ class _FeedScreenState extends State<FeedScreen> {
           child: Stack(
             alignment: Alignment.topLeft,
             children: <Widget>[
-              InkWell(
-                onDoubleTap: () => print('Like post'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PostScreen(
-                        snapshot: documentSnapshot,
-                        docID: documentSnapshot['caption'].toString(),
-                      ),
-                    ),
-                  );
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20), // Image border
-                  child: Image.network(
-                    documentSnapshot['postimage'].toString(),
-                    // fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              PostImage(context, documentSnapshot),
               //TODO cachednetwork for fast loading image
               // CachedNetworkImage(
               //   imageUrl: documentSnapshot!['postimage'],
@@ -349,6 +316,8 @@ class _FeedScreenState extends State<FeedScreen> {
               Positioned(
                 child: Expanded(
                   child: ListTile(
+                    hoverColor: Colors.yellow,
+                    textColor: Colors.white,
                     leading: Container(
                       width: 50.0,
                       height: 50.0,
@@ -395,69 +364,164 @@ class _FeedScreenState extends State<FeedScreen> {
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 10,
-                left: context.dynamicWidth(0.16),
-                child: Card(
-                  color: Colors.white24,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  elevation: 12,
-                  child: Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.favorite_border),
-                        iconSize: 30.0,
-                        onPressed: () => print('Like post'),
-                      ),
-                      Text(
-                        '2,515',
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.chat),
-                        iconSize: 30.0,
-                        onPressed: null,
-                        // onPressed: () {
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (_) => ViewPostScreen(
-                        //           // post: posts[index],
-                        //           ),
-                        //     ),
-                        //   );
-                        // },
-                      ),
-                      Text(
-                        '350',
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.share),
-                        iconSize: 30.0,
-                        onPressed: () => print('Share post'),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.bookmark_border),
-                        iconSize: 30.0,
-                        onPressed: () => print('Save post'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // PostTopPart(documentSnapshot, context),
+              PostBottomPart(context),
             ],
           ),
         );
       }).toList(),
+    );
+  }
+
+  Positioned PostBottomPart(BuildContext context) {
+    return Positioned(
+      bottom: 10,
+      left: context.dynamicWidth(0.16),
+      child: Card(
+        color: Colors.white24,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        elevation: 12,
+        child: Row(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.favorite_border),
+              iconSize: 30.0,
+              onPressed: () => print('Like post'),
+            ),
+            Text(
+              '2,515',
+              style: TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.chat),
+              iconSize: 30.0,
+              onPressed: null,
+              // onPressed: () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (_) => ViewPostScreen(
+              //           // post: posts[index],
+              //           ),
+              //     ),
+              //   );
+              // },
+            ),
+            Text(
+              '350',
+              style: TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.share),
+              iconSize: 30.0,
+              onPressed: () => print('Share post'),
+            ),
+            IconButton(
+              icon: Icon(Icons.bookmark_border),
+              iconSize: 30.0,
+              onPressed: () => print('Save post'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Positioned PostTopPart(
+      DocumentSnapshot<Object?> documentSnapshot, BuildContext context) {
+    return Positioned(
+      child: Expanded(
+        child: ListTile(
+          hoverColor: Colors.yellow,
+          textColor: Colors.white,
+          leading: Container(
+            width: 50.0,
+            height: 50.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black45,
+                  offset: Offset(0, 2),
+                  blurRadius: 6.0,
+                ),
+              ],
+            ),
+            child: GestureDetector(
+              onTap: () {
+                if (documentSnapshot['useruid'] !=
+                    Provider.of<Authentication>(context, listen: false)
+                        .getUserid) {
+                  AppRouter.push(
+                    UserProfile(
+                      userUid: documentSnapshot['useruid'].toString(),
+                    ),
+                  );
+                }
+              },
+              child: CircleAvatar(
+                child: ClipOval(
+                  child: Image(
+                    height: 50.0,
+                    width: 50.0,
+                    image: AssetImage('assets/images/01.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          title: Text(
+            documentSnapshot['username'].toString(),
+          ),
+          subtitle: Text('Location'),
+          trailing: Icon(Icons.more_vert),
+        ),
+      ),
+    );
+  }
+
+  InkWell PostImage(
+      BuildContext context, DocumentSnapshot<Object?> documentSnapshot) {
+    return InkWell(
+      onDoubleTap: () => print('Like post'),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PostScreen(
+              snapshot: documentSnapshot,
+              docID: documentSnapshot['caption'].toString(),
+            ),
+          ),
+        );
+      },
+      child: (documentSnapshot['postimage'] != null)
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(20), // Image border
+              child: Image.network(
+                documentSnapshot['postimage'].toString(),
+                // fit: BoxFit.cover,
+              ),
+            )
+          : Center(
+              child: SizedBox(
+                height: context.dynamicHeight(0.5),
+                width: context.dynamicWidth(0.5),
+                child: const RefreshProgressIndicator(
+                  strokeWidth: 10,
+                  color: Colors.yellow,
+                ),
+              ),
+            ),
     );
   }
 

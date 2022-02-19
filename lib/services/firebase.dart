@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,16 +12,12 @@ import 'auth.dart';
 class FirebaseOpertrations with ChangeNotifier {
   UploadTask? imageuploadTask;
 
-  dynamic initUserName;
-  dynamic initUserEmail;
-  dynamic initUserImage;
-  dynamic get getInitUserName => initUserName;
-  dynamic get getInitUserEmail => initUserEmail;
-  dynamic get getInitUserImage => initUserImage;
-
-  //TODO instead of dynamic you can use String for this variables
-  // String? initUserName;
-  // String? get getInitUserName => initUserName;
+  String? initUserName;
+  String? initUserEmail;
+  String? initUserImage;
+  String? get getInitUserName => initUserName;
+  String? get getInitUserEmail => initUserEmail;
+  String? get getInitUserImage => initUserImage;
 
   // Future uploaduserAvatar(BuildContext context) async {
   //   Reference imageRefrence = FirebaseStorage.instance.ref().child(
@@ -56,10 +53,12 @@ class FirebaseOpertrations with ChangeNotifier {
         .doc(Provider.of<Authentication>(context, listen: false).getUserid)
         .get()
         .then((doc) {
-      print("Fetching user data");
-      initUserEmail = doc.data()!['useremail'];
-      initUserName = doc.data()!['username'];
-      initUserImage = doc.data()!['userimage'];
+      if (kDebugMode) {
+        print("Fetching user data");
+      }
+      initUserEmail = doc.data()!['useremail'].toString();
+      initUserName = doc.data()!['username'].toString();
+      initUserImage = doc.data()!['userimage'].toString();
       print(initUserName);
       print(initUserEmail);
       print(initUserImage);
