@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/screens/signup/widgets/snackbar.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
-import 'package:senior_design_project/theme.dart';
 import 'package:email_validator/email_validator.dart';
 
 class SignUp extends StatefulWidget with ChangeNotifier {
@@ -211,21 +211,18 @@ class _SignUpState extends State<SignUp> {
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: CustomTheme.loginGradientStart,
+                      color: kSecondaryColor,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                     BoxShadow(
-                      color: CustomTheme.loginGradientEnd,
+                      color: kPrimaryColor,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                   ],
                   gradient: LinearGradient(
-                      colors: <Color>[
-                        CustomTheme.loginGradientEnd,
-                        CustomTheme.loginGradientStart
-                      ],
+                      colors: <Color>[kPrimaryColor, kSecondaryColor],
                       begin: FractionalOffset(0.2, 0.2),
                       end: FractionalOffset(1.0, 1.0),
                       stops: <double>[0.0, 1.0],
@@ -233,7 +230,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
-                  splashColor: CustomTheme.loginGradientEnd,
+                  splashColor: kPrimaryColor,
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: const Padding(
                     padding:
@@ -265,9 +262,11 @@ class _SignUpState extends State<SignUp> {
       warningText(context, "Fill all feilds !");
     } else if (!EmailValidator.validate(signupEmailController.text)) {
       warningText(context, "Enter a valid Email");
-    } else if (!signupEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
-      warningText(context, 'You should use Akdeniz Ogrenci Mail');
-    } else if (signupPasswordController.text !=
+    }
+    // else if (!signupEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
+    //   warningText(context, 'You should use Akdeniz Ogrenci Mail');
+    // }
+    else if (signupPasswordController.text !=
         signupConfirmPasswordController.text) {
       warningText(context, "Passwors has to be matched");
     } else if (signupEmailController.text.isNotEmpty) {
@@ -320,7 +319,7 @@ class _SignUpState extends State<SignUp> {
         builder: (context) {
           return Container(
               decoration: BoxDecoration(
-                  color: CustomTheme.black,
+                  color: Colors.black,
                   borderRadius: BorderRadius.circular(15.0)),
               height: MediaQuery.of(context).size.height * 0.1,
               width: MediaQuery.of(context).size.width,

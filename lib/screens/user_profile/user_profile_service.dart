@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class ProfileService with ChangeNotifier {
+class ProfileServices with ChangeNotifier {
   Future followUser(
     String followingUid,
     String? followingDocid,

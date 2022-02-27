@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:senior_design_project/screens/feed/feed_view.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
 import 'package:senior_design_project/screens/upload_post/upload_post_widget.dart';
-import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
-import 'package:senior_design_project/theme.dart';
 
 class AppPageView extends StatefulWidget {
   @override
@@ -19,6 +17,7 @@ class _AppPageViewState extends State<AppPageView> {
   );
 //TODO kaydırma dışında tıklayarak sayfa geçişlerini yapmak için
 // bu classı stateless yapıp counter for stepperı provide etmem gerekebilir
+
   Widget buildPageView() {
     return PageView(
       controller: pageController,

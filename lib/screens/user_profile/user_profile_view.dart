@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_service.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
-import 'package:senior_design_project/theme.dart';
 
 class UserProfile extends StatelessWidget {
   final String userUid;
@@ -70,7 +70,7 @@ class UserProfile extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Provider.of<ProfileService>(context, listen: false)
+                  Provider.of<ProfileServices>(context, listen: false)
                       .followUser(
                           userUid,
                           Provider.of<Authentication>(context, listen: false)
@@ -360,7 +360,7 @@ Future checkFollowersSheet(BuildContext context, dynamic snapshot) {
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(50),
             ),
-            color: CustomTheme.loginGradientStart,
+            color: kSecondaryColor,
           ),
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance

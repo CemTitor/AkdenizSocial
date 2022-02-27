@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/services/upload_post_firebase.dart';
-import 'package:senior_design_project/theme.dart';
 
 //TODO bu classı stateles yaparak çalıştırmayı denedim ama olmadı, geçici olarak stateful yapıcam
 //TODO make control for stepping up,down
@@ -18,7 +18,7 @@ class UploadPostScreen extends StatelessWidget {
     // int currentStep = Provider.of<CounterBloc>(context, listen: false).counter;
 
     return Scaffold(
-      // backgroundColor: CustomTheme.loginGradientEnd,
+      // backgroundColor: kPrimaryColor,
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: Text('Yeni Gönderi'),
@@ -26,15 +26,14 @@ class UploadPostScreen extends StatelessWidget {
           icon: Icon(Icons.done),
           onPressed: () {},
         ),
-        backgroundColor: CustomTheme.loginGradientEnd,
-        foregroundColor: CustomTheme.white,
-        shadowColor: CustomTheme.loginGradientEnd,
+        backgroundColor: kPrimaryColor,
+        foregroundColor: Colors.white,
+        shadowColor: kPrimaryColor,
         elevation: 5,
       ),
       body: Theme(
         data: Theme.of(context).copyWith(
-          colorScheme:
-              ColorScheme.light(primary: CustomTheme.loginGradientStart),
+          colorScheme: ColorScheme.light(primary: kSecondaryColor),
         ),
         child: Stepper(
           type: StepperType.horizontal,

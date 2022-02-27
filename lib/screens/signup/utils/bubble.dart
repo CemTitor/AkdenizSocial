@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:senior_design_project/theme.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 
 class BubbleIndicatorPainter extends CustomPainter {
   BubbleIndicatorPainter(
@@ -12,7 +12,7 @@ class BubbleIndicatorPainter extends CustomPainter {
       required this.pageController})
       : super(repaint: pageController) {
     painter = Paint()
-      ..color = CustomTheme.white
+      ..color = Colors.white
       ..style = PaintingStyle.fill;
   }
 
@@ -44,7 +44,7 @@ class BubbleIndicatorPainter extends CustomPainter {
         Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
 
     canvas.translate(size.width * pageOffset, 0.0);
-    canvas.drawShadow(path, CustomTheme.loginGradientStart, 3.0, true);
+    canvas.drawShadow(path, kSecondaryColor, 3.0, true);
     canvas.drawPath(path, painter!);
   }
 

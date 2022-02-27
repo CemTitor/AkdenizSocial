@@ -2,10 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_design_project/screens/signup/pages/verify.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/screens/signup/widgets/snackbar.dart';
 import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/theme.dart';
 
 class SignIn extends StatefulWidget with ChangeNotifier {
   SignIn({Key? key}) : super(key: key);
@@ -130,21 +129,18 @@ class _SignInState extends State<SignIn> {
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: CustomTheme.loginGradientStart,
+                      color: kSecondaryColor,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                     BoxShadow(
-                      color: CustomTheme.loginGradientEnd,
+                      color: kPrimaryColor,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                   ],
                   gradient: LinearGradient(
-                      colors: <Color>[
-                        CustomTheme.loginGradientEnd,
-                        CustomTheme.loginGradientStart
-                      ],
+                      colors: <Color>[kPrimaryColor, kSecondaryColor],
                       begin: FractionalOffset(0.2, 0.2),
                       end: FractionalOffset(1.0, 1.0),
                       stops: <double>[0.0, 1.0],
@@ -152,7 +148,7 @@ class _SignInState extends State<SignIn> {
                 ),
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
-                  splashColor: CustomTheme.loginGradientEnd,
+                  splashColor: kPrimaryColor,
                   child: const Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
@@ -249,8 +245,9 @@ class _SignInState extends State<SignIn> {
         builder: (context) {
           return Container(
               decoration: BoxDecoration(
-                  color: CustomTheme.black,
-                  borderRadius: BorderRadius.circular(15.0)),
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
               height: MediaQuery.of(context).size.height * 0.1,
               width: MediaQuery.of(context).size.width,
               child: Center(

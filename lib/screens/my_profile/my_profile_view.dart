@@ -5,7 +5,8 @@ import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
 import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/theme.dart';
+
+import '../../constants(config)/color_constant.dart';
 
 class MyProfile extends StatelessWidget {
   @override
@@ -296,7 +297,7 @@ class MyProfile extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.4,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: CustomTheme.loginGradientStart,
+              color: kSecondaryColor,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(50),
               ),

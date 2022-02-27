@@ -3,13 +3,14 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
+import 'package:senior_design_project/screens/chat/chats_view.dart';
 import 'package:senior_design_project/screens/feed/post_view.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
-import 'package:senior_design_project/theme.dart';
 import '../pageview.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -33,6 +34,13 @@ class _FeedScreenState extends State<FeedScreen> {
         title: const Text('Akdeniz Social'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // Provider.of<UploadPost>(context, listen: false)
+              //     .selectpostImageType(context);
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.send),
             onPressed: () => AppRouter.push(
               Messages(),
@@ -40,7 +48,7 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
         ],
       ),
-      backgroundColor: CustomTheme.loginGradientEnd,
+      backgroundColor: kPrimaryColor,
       body: Column(
         children: [
           Expanded(
@@ -64,7 +72,7 @@ class _FeedScreenState extends State<FeedScreen> {
         ],
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: CustomTheme.loginGradientEnd,
+        backgroundColor: kPrimaryColor,
         items: <Widget>[
           const Icon(Icons.home, size: 30),
           const Icon(
@@ -73,21 +81,24 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
           IconButton(
             onPressed: () {
-              // Provider.of<UploadPost>(context, listen: false)
-              //     .selectpostImageType(context);
+              AppRouter.push(
+                const ChatsView(),
+              );
             },
-            icon: const Icon(Icons.place),
+            icon: const Icon(Icons.chat_bubble),
           ),
-          Icon(Icons.notifications, size: 30),
+          const Icon(Icons.notifications, size: 30),
           IconButton(
             icon: CircleAvatar(
               radius: 35.0,
               backgroundColor: Colors.blueGrey,
-              backgroundImage: NetworkImage(Provider.of<FirebaseOpertrations>(
-                    context,
-                    listen: false,
-                  ).getInitUserImage ??
-                  "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg"),
+              backgroundImage: NetworkImage(
+                Provider.of<FirebaseOpertrations>(
+                      context,
+                      listen: false,
+                    ).getInitUserImage ??
+                    "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+              ),
             ),
             onPressed: () {
               AppRouter.push(

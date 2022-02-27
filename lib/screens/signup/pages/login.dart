@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/screens/signup/pages/signin.dart';
 import 'package:senior_design_project/screens/signup/pages/signup.dart';
 import 'package:senior_design_project/screens/signup/utils/bubble.dart';
-import 'package:senior_design_project/theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -50,10 +50,7 @@ class _LoginPageState extends State<LoginPage>
             //   fit: BoxFit.cover,
             // ),
             gradient: LinearGradient(
-                colors: <Color>[
-                  CustomTheme.loginGradientEnd,
-                  CustomTheme.loginGradientStart
-                ],
+                colors: <Color>[kPrimaryColor, kSecondaryColor],
                 begin: FractionalOffset(0.0, 0.1),
                 end: FractionalOffset(1.0, 1.0),
                 stops: <double>[0.0, 1.0],
