@@ -6,12 +6,14 @@ import 'package:senior_design_project/screens/messages/private_chat_service.dart
 import 'package:senior_design_project/screens/feed/feed_view.dart';
 import 'package:senior_design_project/screens/feed/feed_service.dart';
 import 'package:senior_design_project/screens/pageview.dart';
+import 'package:senior_design_project/screens/search/search_services.dart';
 import 'package:senior_design_project/screens/signup/pages/login.dart';
 import 'package:senior_design_project/screens/signup/pages/signup.dart';
 import 'package:senior_design_project/screens/signup/pages/verify.dart';
 import 'package:senior_design_project/screens/welcome/welcome.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/services/page_controller.dart';
 import 'package:senior_design_project/services/upload_post_firebase.dart';
 import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
 import 'package:senior_design_project/theme2.dart';
@@ -44,6 +46,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MyProfileServices()),
         ChangeNotifierProvider(create: (_) => ChatServices()),
         ChangeNotifierProvider(create: (_) => PrivateChatServices()),
+        ChangeNotifierProvider(create: (_) => SearchServices()),
+        ChangeNotifierProvider(create: (_) => PageControllerClass()),
       ],
       child: MaterialApp(
         navigatorKey: AppRouter.navigatorKey,

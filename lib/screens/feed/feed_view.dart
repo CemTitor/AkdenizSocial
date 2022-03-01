@@ -5,13 +5,13 @@ import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
-import 'package:senior_design_project/screens/chat/chats_view.dart';
 import 'package:senior_design_project/screens/feed/post_view.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
+import 'package:senior_design_project/screens/search/search_view.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
-import '../pageview.dart';
+import 'package:senior_design_project/services/page_controller.dart';
 
 class FeedScreen extends StatefulWidget {
   @override
@@ -36,19 +36,26 @@ class _FeedScreenState extends State<FeedScreen> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              // Provider.of<UploadPost>(context, listen: false)
-              //     .selectpostImageType(context);
+              Provider.of<PageControllerClass>(context, listen: false)
+                  .pageController
+                  .previousPage(
+                      duration: Duration(seconds: 1),
+                      curve: Curves.easeInOutExpo);
             },
           ),
           IconButton(
             icon: const Icon(Icons.send),
-            onPressed: () => AppRouter.push(
-              Messages(),
-            ),
+            onPressed: () {
+              Provider.of<PageControllerClass>(context, listen: false)
+                  .pageController
+                  .nextPage(
+                      duration: Duration(seconds: 1),
+                      curve: Curves.easeInOutExpo);
+            },
           ),
         ],
       ),
-      backgroundColor: kPrimaryColor,
+      // backgroundColor: kPrimaryColor,
       body: Column(
         children: [
           Expanded(
@@ -72,18 +79,27 @@ class _FeedScreenState extends State<FeedScreen> {
         ],
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: kPrimaryColor,
+        // backgroundColor: kPrimaryColor,
         items: <Widget>[
           const Icon(Icons.home, size: 30),
-          const Icon(
-            Icons.search,
-            size: 30,
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              size: 30,
+            ),
+            onPressed: () {
+              AppRouter.push(
+                SearchScreen(),
+              );
+            },
           ),
           IconButton(
             onPressed: () {
-              AppRouter.push(
-                const ChatsView(),
-              );
+              Provider.of<PageControllerClass>(context, listen: false)
+                  .pageController
+                  .nextPage(
+                      duration: Duration(seconds: 1),
+                      curve: Curves.easeInOutExpo);
             },
             icon: const Icon(Icons.chat_bubble),
           ),
@@ -322,58 +338,7 @@ class _FeedScreenState extends State<FeedScreen> {
               // CachedNetworkImage(
               //   imageUrl: documentSnapshot!['postimage'],
               // ),
-              Positioned(
-                child: Expanded(
-                  child: ListTile(
-                    hoverColor: Colors.yellow,
-                    textColor: Colors.white,
-                    leading: Container(
-                      width: 50.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black45,
-                            offset: Offset(0, 2),
-                            blurRadius: 6.0,
-                          ),
-                        ],
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          if (documentSnapshot['useruid'] !=
-                              Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getUserid) {
-                            AppRouter.push(
-                              UserProfile(
-                                userUid: documentSnapshot['useruid'].toString(),
-                              ),
-                            );
-                          }
-                        },
-                        child: CircleAvatar(
-                          child: ClipOval(
-                            child: Image(
-                              height: 50.0,
-                              width: 50.0,
-                              image: AssetImage('assets/images/01.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      documentSnapshot['username'].toString(),
-                    ),
-                    subtitle: Text('Location'),
-                    trailing: Icon(Icons.more_vert),
-                  ),
-                ),
-              ),
-              // PostTopPart(documentSnapshot, context),
+              PostTopPart(documentSnapshot, context),
               PostBottomPart(context),
             ],
           ),
@@ -553,7 +518,7 @@ class _FeedScreenState extends State<FeedScreen> {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.yellow,
+                  color: kPrimaryColor,
                   offset: Offset(0, 2),
                   blurRadius: 10.0,
                 ),
