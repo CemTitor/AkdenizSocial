@@ -128,21 +128,19 @@ Start the application on web
 
 ## Packages
 
- Used Packages
- -
- animated_text_kit: ^4.1.1
-  flutter_overboard: ^3.1.1
-  google_fonts: ^2.2.0
-  font_awesome_flutter: ^9.2.0
-  curved_navigation_bar: ^1.0.2
-  provider: ^6.0.2
-  email_validator: ^2.0.1
-  firebase_auth: ^3.3.6
-  cloud_firestore: ^3.1.7
-  image_picker: ^0.8.4+7
-  firebase_storage: ^10.2.7
-  cached_network_image: ^3.2.0
-  timeago: ^3.2.2
+- animated_text_kit: ^4.1.1
+- flutter_overboard: ^3.1.1
+-  google_fonts: ^2.2.0
+-  font_awesome_flutter: ^9.2.0
+-  curved_navigation_bar: ^1.0.2
+-  provider: ^6.0.2
+-  email_validator: ^2.0.1
+-  firebase_auth: ^3.3.6
+-  cloud_firestore: ^3.1.7
+-  image_picker: ^0.8.4+7
+-  firebase_storage: ^10.2.7
+- cached_network_image: ^3.2.0
+-  timeago: ^3.2.2
   
 
 
