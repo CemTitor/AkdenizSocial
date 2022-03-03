@@ -59,13 +59,9 @@ Application is still in development
 
 
 
-## Installation
-
-
-    
 ## Demo
 
-Insert gif or link to demo
+![Alt text](https://github.com/CemTitor/AkdenizSocial/blob/master/gif_20220303_161241.gif)
 
 
 ## FAQ
@@ -122,8 +118,12 @@ Start the application on web
 
 
 ## Screenshots
+![S1](https://user-images.githubusercontent.com/43721794/156572419-f9fe733c-bceb-4c36-b44a-300bbfc02aad.jpg)
+![S3](https://user-images.githubusercontent.com/43721794/156572453-7d93e7fd-2fb9-42cb-bbe0-85d39cbc9058.jpg)
+![S4](https://user-images.githubusercontent.com/43721794/156572432-ab483fc9-2185-4927-b136-bee9b1a7c107.jpg)
+![S2](https://user-images.githubusercontent.com/43721794/156572444-c4b0aa64-bd5a-4a85-86b3-77792d5b82b1.jpg)
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
 
 
 ## Packages
