@@ -59,7 +59,7 @@ Application is still in development
 
 
 
-## Demo
+## Demo Gif
 
 ![Alt text](https://github.com/CemTitor/AkdenizSocial/blob/master/gif_20220303_161241.gif)
 
