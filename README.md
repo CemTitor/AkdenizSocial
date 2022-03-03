@@ -3,7 +3,6 @@
 
 # Akdeniz Social
 
-![S1](https://user-images.githubusercontent.com/43721794/156572917-bc0f684e-421c-4ee3-b50d-8c0c9b6e0523.jpg)
 
 
 
@@ -119,11 +118,6 @@ Start the application on web
 
 
 ## Screenshots
-
-![S2](https://user-images.githubusercontent.com/43721794/156573251-c85df0c0-770f-490a-ae7e-6d37eb40da48.jpg)
-![S3](https://user-images.githubusercontent.com/43721794/156573258-dd178869-9443-4c18-990a-6cdfd1109370.jpg)
-![S1](https://user-images.githubusercontent.com/43721794/156573261-40951f02-9d87-4e51-862f-a986fee1e53b.jpg)
-![S4](https://user-images.githubusercontent.com/43721794/156573265-dedd901b-10b7-47ba-ba3d-c49b0c9fafd5.jpg)
 
 
 
