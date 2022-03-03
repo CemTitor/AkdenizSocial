@@ -120,10 +120,11 @@ Start the application on web
 
 ## Screenshots
 
-![S4](https://user-images.githubusercontent.com/43721794/156572742-331d450d-7c6e-470d-afe3-8efd3a1cbc0f.jpg)
-![S1](https://user-images.githubusercontent.com/43721794/156572760-87eb216d-b74f-4706-800a-362ff78d0905.jpg)
-![S2](https://user-images.githubusercontent.com/43721794/156572761-51f4e4e4-e3fe-4eaa-a96f-f533141fd421.jpg)
-![S3](https://user-images.githubusercontent.com/43721794/156572765-14c6ca72-4d8d-412e-9b72-6d6f48cfd77d.jpg)
+![S2](https://user-images.githubusercontent.com/43721794/156573251-c85df0c0-770f-490a-ae7e-6d37eb40da48.jpg)
+![S3](https://user-images.githubusercontent.com/43721794/156573258-dd178869-9443-4c18-990a-6cdfd1109370.jpg)
+![S1](https://user-images.githubusercontent.com/43721794/156573261-40951f02-9d87-4e51-862f-a986fee1e53b.jpg)
+![S4](https://user-images.githubusercontent.com/43721794/156573265-dedd901b-10b7-47ba-ba3d-c49b0c9fafd5.jpg)
+
 
 
 ## Packages
