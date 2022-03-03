@@ -3,6 +3,7 @@
 
 # Akdeniz Social
 
+![S1](https://user-images.githubusercontent.com/43721794/156572917-bc0f684e-421c-4ee3-b50d-8c0c9b6e0523.jpg)
 
 
 
