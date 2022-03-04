@@ -70,9 +70,6 @@ Application is still in development
 
 Yes.
 
-#### Is the app real time?
-
-Yes.
 
 
 ## Feedback
