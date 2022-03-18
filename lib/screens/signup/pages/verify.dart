@@ -37,11 +37,19 @@ class _VerifyScreenState extends State<VerifyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          'An email has been sent to ${user.email} please verify',
-          style: TextStyle(color: Colors.white),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'An email has been sent to ${user.email} please verify',
+            textAlign: TextAlign.center,
+          ),
+          CircularProgressIndicator(),
+          Text(
+            'When you confirm via e-mail, the login will be opened.',
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
     );
   }

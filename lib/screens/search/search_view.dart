@@ -11,7 +11,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.search),
+        // leading: Icon(Icons.search),
         actions: [
           IconButton(
             onPressed: () {

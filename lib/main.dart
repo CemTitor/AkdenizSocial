@@ -5,6 +5,7 @@ import 'package:senior_design_project/screens/chat/chats_services.dart';
 import 'package:senior_design_project/screens/messages/private_chat_service.dart';
 import 'package:senior_design_project/screens/feed/feed_view.dart';
 import 'package:senior_design_project/screens/feed/feed_service.dart';
+import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
 import 'package:senior_design_project/screens/pageview.dart';
 import 'package:senior_design_project/screens/search/search_services.dart';
 import 'package:senior_design_project/screens/signup/pages/login.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PrivateChatServices()),
         ChangeNotifierProvider(create: (_) => SearchServices()),
         ChangeNotifierProvider(create: (_) => PageControllerClass()),
+        ChangeNotifierProvider(create: (_) => MyProfile()),
       ],
       child: MaterialApp(
         navigatorKey: AppRouter.navigatorKey,

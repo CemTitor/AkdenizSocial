@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
 
+import '../screens/my_profile/my_profile_view.dart';
+
 class UploadPost with ChangeNotifier {
   TextEditingController captionController = TextEditingController();
   String? uploadpostImageURL;
@@ -19,6 +21,13 @@ class UploadPost with ChangeNotifier {
 
   File? get getUploadPostImage => uploadPostImage;
   final picker = ImagePicker();
+
+  UploadTask? imageuploadTask;
+
+  File? userAvatar;
+  File? get getuserAvatar => userAvatar;
+  String? userAvatarUrl;
+  String? get getuserAvatarUrl => userAvatarUrl;
 
   Future pickuserPostImage(
     BuildContext context,
@@ -47,6 +56,38 @@ class UploadPost with ChangeNotifier {
     imageReferance.getDownloadURL().then((imageUrl) {
       uploadpostImageURL = imageUrl;
     });
+    notifyListeners();
+  }
+
+  Future uploaduserAvatar(BuildContext context) async {
+    Reference imageRefrence = FirebaseStorage.instance
+        .ref()
+        .child('userProfileAvatar/${getuserAvatar?.path}${TimeOfDay.now()}');
+
+    imageuploadTask = imageRefrence.putFile(getuserAvatar!);
+
+    await imageuploadTask?.whenComplete(() {
+      print('Image uploaded');
+    });
+
+    imageRefrence.getDownloadURL().then((url) {
+      userAvatarUrl = url.toString();
+      print(
+          'the provile user avatar url => $Provider.of<landingutls>(context,listen: false).userAvatarUrl');
+      notifyListeners();
+    });
+  }
+
+  Future pickuserAvatar(BuildContext context, ImageSource imageSource) async {
+    final pickeduserAvatar = await picker.getImage(source: imageSource);
+    pickeduserAvatar == null
+        ? print('Select Image')
+        : userAvatar = File(pickeduserAvatar.path);
+    print(userAvatar?.path);
+
+    // userAvatar != null
+    //     ? Provider.of<MyProfile>(context, listen: false).showUserAvatar(context)
+    //     : print('Image upload error');
     notifyListeners();
   }
 }

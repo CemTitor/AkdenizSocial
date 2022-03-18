@@ -10,6 +10,8 @@ import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/services/upload_post_firebase.dart';
 
+import '../../services/page_controller.dart';
+
 //TODO bu classı stateles yaparak çalıştırmayı denedim ama olmadı, geçici olarak stateful yapıcam
 //TODO make control for stepping up,down
 class UploadPostScreen extends StatelessWidget {
@@ -216,7 +218,12 @@ Future<void> sharePost(BuildContext context) async {
             .getInitUserEmail,
       });
     }).whenComplete(() {
-      Navigator.pushNamed(context, 'feed2');
+      Provider.of<PageControllerClass>(context, listen: false)
+          .pageController
+          .nextPage(
+              duration: Duration(seconds: 1), curve: Curves.easeInOutExpo);
+      Provider.of<UploadPost>(context, listen: false).captionController.clear();
+      Provider.of<Counter>(context, listen: false).resetCounter();
     });
   }
 }

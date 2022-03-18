@@ -41,6 +41,7 @@ dependencies:
   firebase_storage: ^10.2.7
   cached_network_image: ^3.2.0
   timeago: ^3.2.2
+  flutter_native_splash: ^2.0.5
 
 
 dev_dependencies:
@@ -48,6 +49,11 @@ dev_dependencies:
     sdk: flutter
   lint: ^1.7.2
   #lint kod yazım hatalarını düzeltmek için
+#  flutter_native_splash: ^2.0.5
+
+#flutter_native_splash:
+#  image: assets/images/logo.png
+#  color: "#FBFAFB"
 
 
 
@@ -91,3 +97,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+

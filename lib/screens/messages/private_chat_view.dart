@@ -17,7 +17,7 @@ class PrivateChat extends StatelessWidget {
   PrivateChat({Key? key, required this.documentSnapshot}) : super(key: key);
   final _auth = FirebaseAuth.instance;
 
-  final messageControler = TextEditingController();
+  TextEditingController messageControler = TextEditingController();
 
   final DocumentSnapshot documentSnapshot;
 
@@ -44,7 +44,7 @@ class PrivateChat extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Cem Yılmaz",
+                  "Computer Science ",
                   style: TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -191,6 +191,7 @@ class PrivateChat extends StatelessWidget {
                               .sendMessage(
                                   context, documentSnapshot, messageControler);
                         }
+                        messageControler.clear();
                       },
                       icon: Icon(Icons.send),
                     ),

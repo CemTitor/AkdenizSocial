@@ -23,4 +23,9 @@ class Counter extends ChangeNotifier {
     notifyListeners();
     print(_currentStep);
   }
+
+  void resetCounter() {
+    _currentStep = 0;
+    notifyListeners();
+  }
 }

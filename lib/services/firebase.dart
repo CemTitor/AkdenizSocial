@@ -10,8 +10,6 @@ import 'package:provider/provider.dart';
 import 'auth.dart';
 
 class FirebaseOpertrations with ChangeNotifier {
-  UploadTask? imageuploadTask;
-
   String? initUserName;
   String? initUserEmail;
   String? initUserImage;
@@ -19,32 +17,20 @@ class FirebaseOpertrations with ChangeNotifier {
   String? get getInitUserEmail => initUserEmail;
   String? get getInitUserImage => initUserImage;
 
-  // Future uploaduserAvatar(BuildContext context) async {
-  //   Reference imageRefrence = FirebaseStorage.instance.ref().child(
-  //       'userProfileAvatar/${Provider.of<WelcomeUtils>(context, listen: false).getuserAvatar.path}${TimeOfDay.now()}');
-  //
-  //   imageuploadTask = imageRefrence.putFile(
-  //       Provider.of<WelcomeUtils>(context, listen: false).getuserAvatar);
-  //
-  //   await imageuploadTask.whenComplete(() {
-  //     print('Image uploaded');
-  //   });
-  //
-  //   imageRefrence.getDownloadURL().then((url) {
-  //     Provider.of<WelcomeUtils>(context, listen: false).userAvatarUrl =
-  //         url.toString();
-  //     print(
-  //         'the provile user avatar url => $Provider.of<landingutls>(context,listen: false).userAvatarUrl');
-  //     notifyListeners();
-  //   });
-  // }
-
   Future createUserCollection(
       BuildContext context, Map<String, dynamic> data) async {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Authentication>(context, listen: false).getUserid)
         .set(data);
+  }
+
+  Future updateProfilePicture(
+      BuildContext context, Map<String, dynamic> data) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Authentication>(context, listen: false).getUserid)
+        .update(data);
   }
 
   Future initUserData(BuildContext context) async {
