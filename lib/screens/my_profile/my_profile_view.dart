@@ -62,7 +62,7 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                             SizedBox(
                               height: 36,
                             ),
-                            if (snapshot.data.data()['userimage'] == null)
+                            if (snapshot.data['userimage'] == null)
                               CircleAvatar(
                                 radius: 48,
                                 child: IconButton(
@@ -76,7 +76,13 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                               CircleAvatar(
                                 radius: 48,
                                 backgroundImage: NetworkImage(
-                                  snapshot.data.data()['userimage'].toString(),
+                                  snapshot.data['userimage'].toString(),
+                                ),
+                                child: IconButton(
+                                  icon: Icon(Icons.add_a_photo_rounded),
+                                  onPressed: () {
+                                    selectAvatarOptionssheet(context);
+                                  },
                                 ),
                               ),
                             SizedBox(
@@ -392,142 +398,114 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MaterialButton(
-                        child: Text(
-                          'gALery',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18.0),
-                        ),
-                        onPressed: () {
-                          Provider.of<UploadPost>(context, listen: false)
-                              .pickuserAvatar(context, ImageSource.gallery)
-                              .whenComplete(() {
-                            Navigator.pop(context);
-                            Provider.of<UploadPost>(context, listen: false)
-                                .uploaduserAvatar(context)
-                                .whenComplete(
-                              () async {
-                                print("update profile pic");
-                                await Provider.of<FirebaseOpertrations>(context,
-                                        listen: false)
-                                    .updateProfilePicture(context, {
-                                  'userimage': Provider.of<UploadPost>(context,
-                                          listen: false)
-                                      .getuserAvatarUrl
-                                });
-                              },
-                            );
-                            // showUserAvatar(context);
-                          });
-                        }),
+                      child: Text(
+                        'Galery',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18.0),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+
+                        Provider.of<UploadPost>(context, listen: false)
+                            .pickuserAvatar(context, ImageSource.gallery)
+                            .whenComplete(() {
+                          showUserAvatar(context);
+                        });
+                      },
+                    ),
                     MaterialButton(
-                        child: Text(
-                          'Camera',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18.0),
-                        ),
-                        onPressed: () {
-                          Provider.of<UploadPost>(context, listen: false)
-                              .pickuserAvatar(context, ImageSource.camera)
-                              .whenComplete(() {
-                            Navigator.pop(context);
-                            Provider.of<UploadPost>(context, listen: false)
-                                .uploaduserAvatar(context)
-                                .whenComplete(
-                              () async {
-                                print("update profile pic");
-                                await Provider.of<FirebaseOpertrations>(context,
-                                        listen: false)
-                                    .updateProfilePicture(context, {
-                                  'userimage': Provider.of<UploadPost>(context,
-                                          listen: false)
-                                      .getuserAvatarUrl
-                                });
-                              },
-                            );
-                            // showUserAvatar(context);
-                          });
-                        }),
+                      child: Text(
+                        'Camera',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18.0),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+
+                        Provider.of<UploadPost>(context, listen: false)
+                            .pickuserAvatar(context, ImageSource.camera)
+                            .whenComplete(() {
+                          showUserAvatar(context);
+                        });
+                      },
+                    ),
                   ],
                 ),
               ],
             ),
             height: MediaQuery.of(context).size.height * 0.1,
             width: MediaQuery.of(context).size.width,
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(12.0)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
           );
         });
   }
 
-  // showUserAvatar(BuildContext context) {
-  //   return showModalBottomSheet(
-  //       context: context,
-  //       builder: (context) {
-  //         return Container(
-  //           height: MediaQuery.of(context).size.height * 0.30,
-  //           width: MediaQuery.of(context).size.width,
-  //           child: Column(
-  //             children: [
-  //               Padding(
-  //                 padding: EdgeInsets.symmetric(horizontal: 150.0),
-  //                 child: Divider(
-  //                   thickness: 4.0,
-  //                 ),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.all(8.0),
-  //                 child: CircleAvatar(
-  //                   radius: 60.0,
-  //                   backgroundColor: Colors.transparent,
-  //                   backgroundImage: FileImage(
-  //                     Provider.of<UploadPost>(context, listen: false)
-  //                         .userAvatar,
-  //                   ),
-  //                 ),
-  //               ),
-  //               Container(
-  //                 child: Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                   children: [
-  //                     MaterialButton(
-  //                         child: Text(
-  //                           "Reselect",
-  //                           style: TextStyle(
-  //                             fontWeight: FontWeight.bold,
-  //                             decoration: TextDecoration.underline,
-  //                           ),
-  //                         ),
-  //                         onPressed: () {
-  //                           Provider.of<UploadPost>(context, listen: false)
-  //                               .pickuserAvatar(context, ImageSource.gallery);
-  //                         }),
-  //                     MaterialButton(
-  //                         child: Text("Confirm Image",
-  //                             style: TextStyle(fontWeight: FontWeight.bold)),
-  //                         onPressed: () {
-  //                           Provider.of<UploadPost>(context, listen: false)
-  //                               .uploaduserAvatar(context)
-  //                               .whenComplete(
-  //                             () async {
-  //                               print("update profile pic");
-  //                               await Provider.of<FirebaseOpertrations>(context,
-  //                                       listen: false)
-  //                                   .updateProfilePicture(context, {
-  //                                 'userimage': Provider.of<UploadPost>(context,
-  //                                         listen: false)
-  //                                     .getuserAvatarUrl
-  //                               });
-  //                             },
-  //                           );
-  //                         },),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           decoration:
-  //               BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
-  //         );
-  //       });
-  // }
+  showUserAvatar(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.30,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 150.0),
+                  child: Divider(
+                    thickness: 4.0,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    radius: 60.0,
+                    backgroundImage: FileImage(
+                      Provider.of<UploadPost>(context, listen: false)
+                          .userAvatar,
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                          child: Text(
+                            "Reselect",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          onPressed: () {
+                            Provider.of<UploadPost>(context, listen: false)
+                                .pickuserAvatar(context, ImageSource.gallery);
+                          }),
+                      MaterialButton(
+                          child: Text("Confirm Image",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Provider.of<UploadPost>(context, listen: false)
+                                .uploadUserAvatartoFirebaseStorage(context)
+                                .whenComplete(() {
+                              Provider.of<UploadPost>(context, listen: false)
+                                  .updateUserAvatar(context);
+                              Provider.of<FirebaseOpertrations>(context,
+                                      listen: false)
+                                  .initUserData(context);
+                            });
+                          }),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+          );
+        });
+  }
 }

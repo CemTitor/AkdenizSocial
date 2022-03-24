@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,10 @@ class _FeedScreenState extends State<FeedScreen> {
                   .fetchPostsByTime(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const RefreshProgressIndicator();
+                  return RefreshProgressIndicator(
+                    semanticsLabel: 'asdsa',
+                    color: Colors.blue,
+                  );
                 } else {
                   return stackPost(context, snapshot);
                 }
@@ -333,11 +337,11 @@ class _FeedScreenState extends State<FeedScreen> {
           child: Stack(
             alignment: Alignment.topLeft,
             children: <Widget>[
-              PostImage(context, documentSnapshot),
+              // PostImage(context, documentSnapshot),
               //TODO cachednetwork for fast loading image
-              // CachedNetworkImage(
-              //   imageUrl: documentSnapshot!['postimage'],
-              // ),
+              CachedNetworkImage(
+                imageUrl: documentSnapshot['postimage'].toString(),
+              ),
               PostTopPart(documentSnapshot, context),
               PostBottomPart(context),
             ],
@@ -446,7 +450,13 @@ class _FeedScreenState extends State<FeedScreen> {
                   child: Image(
                     height: 50.0,
                     width: 50.0,
-                    image: AssetImage('assets/images/01.jpg'),
+                    image: NetworkImage(
+                      Provider.of<FirebaseOpertrations>(
+                            context,
+                            listen: false,
+                          ).getInitUserImage ??
+                          "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),

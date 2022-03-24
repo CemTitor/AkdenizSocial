@@ -1,33 +1,32 @@
 import 'dart:io';
 
 //import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
+import 'package:senior_design_project/services/auth.dart';
 
 import '../screens/my_profile/my_profile_view.dart';
 
 class UploadPost with ChangeNotifier {
   TextEditingController captionController = TextEditingController();
-  String? uploadpostImageURL;
-
-  String? get getUploadPostImageUrl => uploadpostImageURL;
-
-  late UploadTask imagePostUploadTask;
-  File? uploadPostImage;
-
-  File? get getUploadPostImage => uploadPostImage;
   final picker = ImagePicker();
 
-  UploadTask? imageuploadTask;
+  String? uploadpostImageURL;
+  String? get getUploadPostImageUrl => uploadpostImageURL;
+  late UploadTask imagePostUploadTask;
+  File? uploadPostImage;
+  File? get getUploadPostImage => uploadPostImage;
 
-  File? userAvatar;
-  File? get getuserAvatar => userAvatar;
   String? userAvatarUrl;
   String? get getuserAvatarUrl => userAvatarUrl;
+  UploadTask? imageAvatarUploadTask;
+  late File userAvatar;
+  File get getuserAvatar => userAvatar;
 
   Future pickuserPostImage(
     BuildContext context,
@@ -59,35 +58,42 @@ class UploadPost with ChangeNotifier {
     notifyListeners();
   }
 
-  Future uploaduserAvatar(BuildContext context) async {
+  Future updateUserAvatar(BuildContext context) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Authentication>(context, listen: false).getUserid)
+        .update({'userimage': getuserAvatarUrl})
+        .then((value) => print("User Updated"))
+        .catchError((error) => print("Failed to update user: $error"));
+  }
+
+  Future uploadUserAvatartoFirebaseStorage(BuildContext context) async {
     Reference imageRefrence = FirebaseStorage.instance
         .ref()
-        .child('userProfileAvatar/${getuserAvatar?.path}${TimeOfDay.now()}');
+        .child('userProfileAvatar/${getuserAvatar.path}${TimeOfDay.now()}');
 
-    imageuploadTask = imageRefrence.putFile(getuserAvatar!);
+    imageAvatarUploadTask = imageRefrence.putFile(getuserAvatar);
 
-    await imageuploadTask?.whenComplete(() {
+    await imageAvatarUploadTask?.whenComplete(() {
       print('Image uploaded');
     });
 
     imageRefrence.getDownloadURL().then((url) {
       userAvatarUrl = url.toString();
-      print(
-          'the provile user avatar url => $Provider.of<landingutls>(context,listen: false).userAvatarUrl');
       notifyListeners();
     });
   }
 
   Future pickuserAvatar(BuildContext context, ImageSource imageSource) async {
-    final pickeduserAvatar = await picker.getImage(source: imageSource);
+    final pickeduserAvatar = await picker.pickImage(source: imageSource);
     pickeduserAvatar == null
         ? print('Select Image')
         : userAvatar = File(pickeduserAvatar.path);
-    print(userAvatar?.path);
+    print(userAvatar.path);
 
-    // userAvatar != null
-    //     ? Provider.of<MyProfile>(context, listen: false).showUserAvatar(context)
-    //     : print('Image upload error');
+    userAvatar != null
+        ? Provider.of<MyProfile>(context, listen: false).showUserAvatar(context)
+        : print('Image upload error');
     notifyListeners();
   }
 }

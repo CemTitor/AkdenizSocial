@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:senior_design_project/constants(config)/app_router.dart';
+import 'package:senior_design_project/screens/signup/pages/login.dart';
 import 'package:senior_design_project/services/auth.dart';
 
 class MyProfileServices with ChangeNotifier {
@@ -42,11 +44,14 @@ class MyProfileServices with ChangeNotifier {
                   ),
                 ),
                 onPressed: () {
+                  Navigator.pop(context, true);
                   Provider.of<Authentication>(context, listen: false)
                       .logOutViaEmail()
                       .whenComplete(
                     () {
-                      Navigator.pop(context, true);
+                      AppRouter.push(
+                        LoginPage(),
+                      );
                     },
                   );
                 },
