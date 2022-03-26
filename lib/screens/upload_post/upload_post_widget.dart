@@ -87,7 +87,7 @@ class UploadPostScreen extends StatelessWidget {
                       ? Text('Boş')
                       : Image.file(
                           Provider.of<UploadPost>(context, listen: false)
-                              .uploadPostImage!,
+                              .imageFile!,
                         ),
             ),
             Step(
@@ -105,7 +105,7 @@ class UploadPostScreen extends StatelessWidget {
                   else
                     Image.file(
                       Provider.of<UploadPost>(context, listen: false)
-                          .uploadPostImage!,
+                          .imageFile!,
                     ),
                   TextField(
                     maxLines: 5,
@@ -129,9 +129,6 @@ class UploadPostScreen extends StatelessWidget {
               ),
             ),
           ],
-          onStepTapped: (step) {
-            Provider.of<Counter>(context, listen: false).counter = step;
-          },
           currentStep: Provider.of<Counter>(context, listen: false).counter,
           onStepContinue: () {
             if (Provider.of<Counter>(context, listen: false).counter == 1) {
@@ -162,7 +159,7 @@ class UploadPostScreen extends StatelessWidget {
                   ),
                 TextButton(
                   onPressed: details.onStepContinue,
-                  child: Text(isLastStep ? 'CONFIRM ' : 'NEXT'),
+                  child: Text(isLastStep ? '' : 'NEXT'),
                 ),
               ],
             );

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +20,8 @@ class UploadPost with ChangeNotifier {
   String? uploadpostImageURL;
   String? get getUploadPostImageUrl => uploadpostImageURL;
   late UploadTask imagePostUploadTask;
-  File? uploadPostImage;
-  File? get getUploadPostImage => uploadPostImage;
+  File? imageFile;
+  File? get getUploadPostImage => imageFile;
 
   String? userAvatarUrl;
   String? get getuserAvatarUrl => userAvatarUrl;
@@ -32,23 +33,27 @@ class UploadPost with ChangeNotifier {
     BuildContext context,
     ImageSource imageSource,
   ) async {
-    final uploadpostImageVal = await picker.pickImage(source: imageSource);
-    uploadpostImageVal == null
-        ? print('Select Image')
-        : uploadPostImage = File(uploadpostImageVal.path);
-    print(uploadpostImageVal!.path);
+    final pickedFile = await picker.pickImage(source: imageSource);
+    cropuserPostImage(context, pickedFile!.path);
+  }
 
-    uploadPostImage != null
-        ? Provider.of<Counter>(context, listen: false).increaseCounter()
-        : print('Image upload error');
-    notifyListeners();
+  Future cropuserPostImage(BuildContext context, String filePath) async {
+    final File? croppedImage = await ImageCropper().cropImage(
+      sourcePath: filePath,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+    );
+    if (croppedImage != null) {
+      imageFile = croppedImage;
+      Provider.of<Counter>(context, listen: false).increaseCounter();
+      notifyListeners();
+    }
   }
 
   Future uploadPostImageToFirebaseStorage() async {
     Reference imageReferance = FirebaseStorage.instance
         .ref()
-        .child('posts/${uploadPostImage?.path}/${TimeOfDay.now()}');
-    imagePostUploadTask = imageReferance.putFile(uploadPostImage!);
+        .child('posts/${imageFile?.path}/${TimeOfDay.now()}');
+    imagePostUploadTask = imageReferance.putFile(imageFile!);
     await imagePostUploadTask.whenComplete(() {
       print("Posting image to firebase storage");
     });
