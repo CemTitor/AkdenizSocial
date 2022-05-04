@@ -16,11 +16,55 @@ class AppPageView extends StatefulWidget {
 class _AppPageViewState extends State<AppPageView> {
   // PageController pageController = PageController(
   //   initialPage: 1,
-  //   keepPage: true,
+  //   // keepPage: true,
   // );
 
 //TODO kaydırma dışında tıklayarak sayfa geçişlerini yapmak için
 // bu classı stateless yapıp counter for stepperı provide etmem gerekebilir
+
+  @override
+  void initState() {
+    Provider.of<FirebaseOpertrations>(context, listen: false)
+        .initUserData(context);
+
+    super.initState();
+  }
+
+  Future<bool?> showWarning(BuildContext context) async =>
+      Provider.of<MyProfileServices>(context, listen: false)
+          .logutdialog(context);
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      child: Scaffold(
+        body: buildPageView(),
+      ),
+      onWillPop: () async {
+        final isFeedPage =
+            Provider.of<PageControllerClass>(context, listen: false)
+                    .pageController
+                    .page!
+                    .round() ==
+                Provider.of<PageControllerClass>(context, listen: false)
+                    .pageController
+                    .initialPage;
+        if (isFeedPage) {
+          final shouldPop = await showWarning(context);
+          return shouldPop ?? false;
+        } else {
+          Provider.of<PageControllerClass>(context, listen: false)
+              .pageController
+              .animateToPage(
+                1,
+                duration: const Duration(milliseconds: 1000),
+                curve: Curves.bounceOut,
+              );
+
+          return false;
+        }
+      },
+    );
+  }
 
   Widget buildPageView() {
     return PageView(
@@ -32,57 +76,19 @@ class _AppPageViewState extends State<AppPageView> {
       ],
     );
   }
-
-  @override
-  void initState() {
-    Provider.of<FirebaseOpertrations>(context, listen: false)
-        .initUserData(context);
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        final isFeedPage = Provider.of<PageControllerClass>(context)
-                .pageController
-                .page!
-                .round() ==
-            Provider.of<PageControllerClass>(context)
-                .pageController
-                .initialPage;
-        if (isFeedPage) {
-          final shouldPop =
-              await Provider.of<MyProfileServices>(context, listen: false)
-                  .logutdialog(context);
-          return shouldPop ?? false;
-        } else {
-          Provider.of<PageControllerClass>(context).pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.bounceOut,
-              );
-          return false;
-        }
-      },
-      child: Scaffold(
-        body: buildPageView(),
-      ),
-    );
-  }
 }
 
-class Messages extends StatefulWidget {
-  @override
-  _MessagesState createState() => _MessagesState();
-}
-
-class _MessagesState extends State<Messages> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.yellowAccent,
-      child: const Center(child: Text('MESAJLAR')),
-    );
-  }
-}
+// class Messages extends StatefulWidget {
+//   @override
+//   _MessagesState createState() => _MessagesState();
+// }
+//
+// class _MessagesState extends State<Messages> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       color: Colors.yellowAccent,
+//       child: const Center(child: Text('MESAJLAR')),
+//     );
+//   }
+// }

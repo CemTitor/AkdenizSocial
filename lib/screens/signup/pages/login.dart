@@ -62,10 +62,11 @@ class _LoginPageState extends State<LoginPage>
               Padding(
                 padding: const EdgeInsets.only(top: 75.0),
                 child: Image(
-                    height:
-                        MediaQuery.of(context).size.height > 800 ? 191.0 : 150,
-                    fit: BoxFit.fill,
-                    image: const AssetImage('assets/images/logo.png')),
+                  height:
+                      MediaQuery.of(context).size.height > 800 ? 191.0 : 150,
+                  fit: BoxFit.fill,
+                  image: const AssetImage('assets/images/logo.png'),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),

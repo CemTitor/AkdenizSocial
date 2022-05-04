@@ -232,8 +232,8 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                             return Container(
                               height: size.height * 0.60 - 56,
                               padding: EdgeInsets.only(
-                                left: 16,
-                                right: 16,
+                                left: 0,
+                                right: 0,
                                 top: 0,
                                 bottom: 24,
                               ),
@@ -249,41 +249,22 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                                     //   showpostDetails(
                                     //       context, documentSnapshot);
                                     // },
-                                    child: Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.25,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: FittedBox(
-                                            child: Image.network(
-                                                documentSnapshot['postimage']
-                                                    .toString()),
-                                          )),
-                                    ),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(30),
+                                          ),
+                                        ),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.25,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Image.network(
+                                            documentSnapshot['postimage']
+                                                .toString())),
                                   );
                                 }).toList(),
-                                // List.generate(
-                                //   12,
-                                //   (index) {
-                                //     return Container(
-                                //       decoration: BoxDecoration(
-                                //         borderRadius: BorderRadius.all(
-                                //           Radius.circular(10),
-                                //         ),
-                                //         image: DecorationImage(
-                                //           image: AssetImage("assets/images/0" +
-                                //               index.toString() +
-                                //               ".jpg"),
-                                //           fit: BoxFit.cover,
-                                //         ),
-                                //       ),
-                                //     );
-                                //   },
-                                // ),
                               ),
                             );
                           }

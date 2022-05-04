@@ -40,16 +40,19 @@ class PrivateChat extends StatelessWidget {
                     "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
               ),
             ),
+            SizedBox(
+              width: 10,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Computer Science ",
-                  style: TextStyle(fontSize: 16),
+                  documentSnapshot['chatroomname'].toString(),
+                  style: TextStyle(fontSize: 14),
                 ),
                 Text(
                   "Active 3m ago",
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 10),
                 )
               ],
             )

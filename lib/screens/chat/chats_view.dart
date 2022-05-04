@@ -46,117 +46,147 @@ class ChatsView extends StatelessWidget {
 
 StreamBuilder<QuerySnapshot<Object?>> chatRoomList() {
   return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('chatrooms')
-          .orderBy('time', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return ListView(
-            children:
-                snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
-              Provider.of<ChatServices>(context, listen: false)
-                  .showTimeAgo(documentSnapshot['time'] as Timestamp);
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          PrivateChat(documentSnapshot: documentSnapshot),
-                    ),
-                  );
-                  // AppRouter.push(
-                  //   PrivateChat(
-                  //     documentSnapshot: documentSnapshot,
-                  //   ),
-                  // );
-                  // Navigator.pushReplacement(
-                  //     context,
-                  //     PageTransition(
-                  //     child: GroupMessages(
-                  //     documentSnapshot: documentSnapshot),
-                  // type: PageTransitionType.bottomToTop),
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: kDefaultPadding,
-                      vertical: kDefaultPadding * 0.75),
-                  child: Row(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 24,
-                            backgroundImage: NetworkImage(
-                              Provider.of<FirebaseOpertrations>(
-                                    context,
-                                    listen: false,
-                                  ).getInitUserImage ??
-                                  "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
-                            ),
-                          ),
-                          // if (isOnline)
-                          //   Positioned(
-                          //     right: 0,
-                          //     bottom: 0,
-                          //     child: Container(
-                          //       height: 16,
-                          //       width: 16,
-                          //       decoration: BoxDecoration(
-                          //         color: kPrimaryColor,
-                          //         shape: BoxShape.circle,
-                          //         border: Border.all(
-                          //             color: Theme.of(context)
-                          //                 .scaffoldBackgroundColor,
-                          //             width: 3),
-                          //       ),
-                          //     ),
-                          //   )
-                        ],
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: kDefaultPadding),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                documentSnapshot['chatroomname'].toString(),
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(height: 8),
-                              Opacity(
-                                opacity: 0.64,
-                                child: Text(
-                                  "Last message :)",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
+    stream: FirebaseFirestore.instance
+        .collection('chatrooms')
+        .orderBy('time', descending: true)
+        .snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else {
+        return ListView(
+          children:
+              snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+            Provider.of<ChatServices>(context, listen: false)
+                .showTimeAgo(documentSnapshot['time'] as Timestamp);
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        PrivateChat(documentSnapshot: documentSnapshot),
+                  ),
+                );
+                // AppRouter.push(
+                //   PrivateChat(
+                //     documentSnapshot: documentSnapshot,
+                //   ),
+                // );
+                // Navigator.pushReplacement(
+                //     context,
+                //     PageTransition(
+                //     child: GroupMessages(
+                //     documentSnapshot: documentSnapshot),
+                // type: PageTransitionType.bottomToTop),
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: kDefaultPadding,
+                  vertical: kDefaultPadding * 0.75,
+                ),
+                child: Row(
+                  children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundImage: NetworkImage(
+                            Provider.of<FirebaseOpertrations>(
+                                  context,
+                                  listen: false,
+                                ).getInitUserImage ??
+                                "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
                           ),
                         ),
+                        // if (isOnline)
+                        //   Positioned(
+                        //     right: 0,
+                        //     bottom: 0,
+                        //     child: Container(
+                        //       height: 16,
+                        //       width: 16,
+                        //       decoration: BoxDecoration(
+                        //         color: kPrimaryColor,
+                        //         shape: BoxShape.circle,
+                        //         border: Border.all(
+                        //             color: Theme.of(context)
+                        //                 .scaffoldBackgroundColor,
+                        //             width: 3),
+                        //       ),
+                        //     ),
+                        //   )
+                      ],
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: kDefaultPadding,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              documentSnapshot['chatroomname'].toString(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Opacity(
+                              opacity: 0.64,
+                              // child: FutureBuilder<QuerySnapshot>(
+                              //   future: FirebaseFirestore.instance
+                              //       .collection('chatrooms')
+                              //       .doc(documentSnapshot.id)
+                              //       .collection('messages')
+                              //       .snapshots()
+                              //       .last, // async work
+                              //   builder: (BuildContext context,
+                              //       AsyncSnapshot<QuerySnapshot> snapshot) {
+                              //     switch (snapshot.connectionState) {
+                              //       case ConnectionState.waiting:
+                              //         return Text('Loading....');
+                              //       default:
+                              //         if (!snapshot.hasData)
+                              //           return Text(
+                              //             'Error: ${snapshot.error}',
+                              //           );
+                              //         else
+                              //           return Text(
+                              //             'Result: ${snapshot.data}',
+                              //           );
+                              //     }
+                              //   },
+                              // ),
+                              child: Text(
+                                "Last message :)",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Opacity(
-                        opacity: 0.64,
-                        child: Text(
-                            '${Provider.of<ChatServices>(context, listen: false).getImageTimePosted.toString()}'),
+                    ),
+                    Opacity(
+                      opacity: 0.64,
+                      child: Text(
+                        '${Provider.of<ChatServices>(context, listen: false).getImageTimePosted.toString()}',
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            }).toList(),
-          );
-        }
-      });
+              ),
+            );
+          }).toList(),
+        );
+      }
+    },
+  );
 }
 
 Future createChatroomBottomSheet(BuildContext context) {
@@ -192,12 +222,14 @@ Future createChatroomBottomSheet(BuildContext context) {
                       context,
                       listen: false,
                     ).initUserName,
-                    'userimage': Provider.of<FirebaseOpertrations>(context,
-                            listen: false)
-                        .initUserImage,
-                    'useremail': Provider.of<FirebaseOpertrations>(context,
-                            listen: false)
-                        .initUserEmail,
+                    'userimage': Provider.of<FirebaseOpertrations>(
+                      context,
+                      listen: false,
+                    ).initUserImage,
+                    'useremail': Provider.of<FirebaseOpertrations>(
+                      context,
+                      listen: false,
+                    ).initUserEmail,
                     'useruid':
                         Provider.of<Authentication>(context, listen: false)
                             .getUserid,

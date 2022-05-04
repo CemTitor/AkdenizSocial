@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:senior_design_project/screens/chat/chats_services.dart';
+import 'package:senior_design_project/screens/feed/postfunctions.dart';
 import 'package:senior_design_project/screens/messages/private_chat_service.dart';
 import 'package:senior_design_project/screens/feed/feed_view.dart';
 import 'package:senior_design_project/screens/feed/feed_service.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SearchServices()),
         ChangeNotifierProvider(create: (_) => PageControllerClass()),
         ChangeNotifierProvider(create: (_) => MyProfile()),
+        ChangeNotifierProvider(create: (_) => PostFunctions()),
       ],
       child: MaterialApp(
         navigatorKey: AppRouter.navigatorKey,
@@ -81,3 +83,11 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+//TODO: splash screen
+//TODO: posta tıklayınca posta gir (profilde)
+//TODO: chatboxta last messag göster
+//TODO: bildirim göster
+//TODO:story
+//TODO: karanlık aydınlık mod için renkler
+//TODO: foto caption editleyince bozuluyor

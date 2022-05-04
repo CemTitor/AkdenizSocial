@@ -7,6 +7,7 @@ import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
 import 'package:senior_design_project/screens/feed/post_view.dart';
+import 'package:senior_design_project/screens/feed/postfunctions.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
 import 'package:senior_design_project/screens/search/search_view.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
@@ -35,14 +36,13 @@ class _FeedScreenState extends State<FeedScreen> {
         title: const Text('Akdeniz Social'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
             onPressed: () {
-              Provider.of<PageControllerClass>(context, listen: false)
-                  .pageController
-                  .previousPage(
-                      duration: Duration(seconds: 1),
-                      curve: Curves.easeInOutExpo);
+              showSearch(
+                context: context,
+                delegate: CustomSearch(),
+              );
             },
+            icon: Icon(Icons.search),
           ),
           IconButton(
             icon: const Icon(Icons.send),
@@ -87,14 +87,13 @@ class _FeedScreenState extends State<FeedScreen> {
         items: <Widget>[
           const Icon(Icons.home, size: 30),
           IconButton(
-            icon: Icon(
-              Icons.search,
-              size: 30,
-            ),
+            icon: const Icon(Icons.add_circle_rounded),
             onPressed: () {
-              AppRouter.push(
-                SearchScreen(),
-              );
+              Provider.of<PageControllerClass>(context, listen: false)
+                  .pageController
+                  .previousPage(
+                      duration: Duration(seconds: 1),
+                      curve: Curves.easeInOutExpo);
             },
           ),
           IconButton(
@@ -134,216 +133,20 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Widget firebaseKismiTam(
-      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    return ListView(
-      children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
-        // Provider.of<PostFunctions>(context, listen: false)
-        //     .showTimeAgo(documentSnapshot['time']);
-        return Column(
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    if (documentSnapshot['useruid'] !=
-                        Provider.of<Authentication>(context, listen: false)
-                            .getUserid) {
-                      AppRouter.push(
-                        UserProfile(
-                          userUid: documentSnapshot['useruid'].toString(),
-                        ),
-                      );
-                    }
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: Colors.blueGrey,
-                    radius: 20.0,
-                    backgroundImage:
-                        NetworkImage(documentSnapshot['userimage'].toString()),
-                  ),
-                ),
-                Container(
-                  height: 50.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          child: Text(documentSnapshot['caption'].toString(),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0))),
-                      Container(
-                        child: RichText(
-                          text: TextSpan(
-                            text: documentSnapshot['useremail'].toString(),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0),
-                            children: <TextSpan>[
-                              // TextSpan(
-                              //   text:
-                              //       ' , ${Provider.of<PostFunctions>(context, listen: false).getImageTimePosted.toString()}',
-                              //   style: TextStyle(color: Colors.black12),
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: 80.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        // onLongPress: () {
-                        //   Provider.of<PostFunctions>(context, listen: false)
-                        //       .showlikes(context, documentSnapshot['caption']);
-                        // },
-                        // onTap: () {
-                        //   Provider.of<PostFunctions>(context, listen: false)
-                        //       .addlike(
-                        //           context,
-                        //           documentSnapshot['caption'],
-                        //           Provider.of<Authentication>(context,
-                        //                   listen: false)
-                        //               .getUserid);
-                        // },
-                        child: Icon(
-                          Icons.label,
-                          color: Colors.red,
-                          size: 22.0,
-                        ),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('posts')
-                              .doc(
-                                  // documentSnapshot!['caption'],
-                                  'caption')
-                              .collection('likes')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                              );
-                            }
-                          })
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        // onTap: () {
-                        //   Provider.of<PostFunctions>(context, listen: false)
-                        //       .showCommentsSheet(context, documentSnapshot,
-                        //           documentSnapshot['caption']);
-                        // },
-                        child: Icon(
-                          Icons.label_important_outline,
-                          color: Colors.blue,
-                          size: 22.0,
-                        ),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('posts')
-                              .doc(
-                                documentSnapshot['caption'].toString(),
-                              )
-                              .collection('comments')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                              );
-                            }
-                          })
-                    ],
-                  ),
-                ),
-                Provider.of<Authentication>(context, listen: false).getUserid ==
-                        documentSnapshot['useruid']
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.star,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          //   Provider.of<PostFunctions>(context, listen: false)
-                          //       .showPostOptions(
-                          //           context, documentSnapshot['caption']);
-                        },
-                      )
-                    : Container(
-                        width: 0,
-                        height: 0,
-                      )
-              ],
-            ),
-          ],
-        );
-      }).toList(),
-    );
-  }
-
   Widget stackPost(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     return ListView(
       children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
-        // Provider.of<PostFunctions>(context, listen: false)
-        //     .showTimeAgo(documentSnapshot['time']);
+        Provider.of<PostFunctions>(context, listen: false)
+            .showTimeAgo(documentSnapshot['time'] as Timestamp);
         return Padding(
           padding: context.paddingAllow,
           child: Stack(
             alignment: Alignment.topLeft,
             children: <Widget>[
-              // PostImage(context, documentSnapshot),
-              //TODO cachednetwork for fast loading image
-              CachedNetworkImage(
-                imageUrl: documentSnapshot['postimage'].toString(),
-              ),
+              PostImage(context, documentSnapshot),
               PostTopPart(documentSnapshot, context),
-              PostBottomPart(context),
+              PostBottomPart(documentSnapshot, context),
             ],
           ),
         );
@@ -351,10 +154,11 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Positioned PostBottomPart(BuildContext context) {
+  Positioned PostBottomPart(
+      DocumentSnapshot<Object?> documentSnapshot, BuildContext context) {
     return Positioned(
       bottom: 10,
-      left: context.dynamicWidth(0.16),
+      left: context.dynamicWidth(0.2),
       child: Card(
         color: Colors.white24,
         shape: RoundedRectangleBorder(
@@ -362,41 +166,97 @@ class _FeedScreenState extends State<FeedScreen> {
         ),
         elevation: 12,
         child: Row(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.favorite_border),
-              iconSize: 30.0,
-              onPressed: () => print('Like post'),
-            ),
-            Text(
-              '2,515',
-              style: TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: GestureDetector(
+                onLongPress: () {
+                  Provider.of<PostFunctions>(context, listen: false).showlikes(
+                      context, documentSnapshot['caption'].toString());
+                },
+                onTap: () {
+                  Provider.of<PostFunctions>(context, listen: false).addlike(
+                      context,
+                      documentSnapshot['caption'].toString(),
+                      Provider.of<Authentication>(context, listen: false)
+                          .getUserid);
+                },
+                child: Icon(
+                  Icons.favorite_border,
+                  size: 30.0,
+                ),
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.chat),
-              iconSize: 30.0,
-              onPressed: null,
-              // onPressed: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (_) => ViewPostScreen(
-              //           // post: posts[index],
-              //           ),
-              //     ),
-              //   );
-              // },
-            ),
-            Text(
-              '350',
-              style: TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('posts')
+                    .doc(
+                      documentSnapshot['caption'].toString(),
+                    )
+                    .collection('likes')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        snapshot.data!.docs.length.toString(),
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  }
+                }),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => PostScreen(
+                      snapshot: documentSnapshot,
+                      docID: documentSnapshot['caption'].toString(),
+                    ),
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.chat,
+                size: 30.0,
               ),
             ),
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('posts')
+                    .doc(
+                      documentSnapshot['caption'].toString(),
+                    )
+                    .collection('comments')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        snapshot.data!.docs.length.toString(),
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  }
+                }),
             IconButton(
               icon: Icon(Icons.share),
               iconSize: 30.0,
@@ -415,6 +275,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Positioned PostTopPart(
       DocumentSnapshot<Object?> documentSnapshot, BuildContext context) {
+    // Provider.of<PostFunctions>(context, listen: false)
+    //     .showTimeAgo(documentSnapshot['time'] as Timestamp);
     return Positioned(
       child: Expanded(
         child: ListTile(
@@ -464,10 +326,37 @@ class _FeedScreenState extends State<FeedScreen> {
             ),
           ),
           title: Text(
-            documentSnapshot['username'].toString(),
+            documentSnapshot['caption'].toString(),
           ),
-          subtitle: Text('Location'),
-          trailing: Icon(Icons.more_vert),
+          subtitle: RichText(
+            text: TextSpan(
+                text: documentSnapshot['username'].toString(),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                children: <TextSpan>[
+                  TextSpan(
+                    text:
+                        ' , ${Provider.of<PostFunctions>(context, listen: false).getImageTimePosted.toString()}',
+                    style: TextStyle(),
+                  )
+                ]),
+          ),
+          // trailing: Icon(Icons.more_vert),
+          trailing:
+              Provider.of<Authentication>(context, listen: false).getUserid ==
+                      documentSnapshot['useruid']
+                  ? IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {
+                        Provider.of<PostFunctions>(context, listen: false)
+                            .showPostOptions(
+                          context,
+                          documentSnapshot['caption'].toString(),
+                        );
+                      })
+                  : Container(
+                      width: 0,
+                      height: 0,
+                    ),
         ),
       ),
     );
@@ -476,7 +365,12 @@ class _FeedScreenState extends State<FeedScreen> {
   InkWell PostImage(
       BuildContext context, DocumentSnapshot<Object?> documentSnapshot) {
     return InkWell(
-      onDoubleTap: () => print('Like post'),
+      onDoubleTap: () {
+        Provider.of<PostFunctions>(context, listen: false).addlike(
+            context,
+            documentSnapshot['caption'].toString(),
+            Provider.of<Authentication>(context, listen: false).getUserid);
+      },
       onTap: () {
         Navigator.push(
           context,
@@ -491,9 +385,13 @@ class _FeedScreenState extends State<FeedScreen> {
       child: (documentSnapshot['postimage'] != null)
           ? ClipRRect(
               borderRadius: BorderRadius.circular(20), // Image border
-              child: Image.network(
-                documentSnapshot['postimage'].toString(),
-                // fit: BoxFit.cover,
+              child:
+                  // Image.network(
+                  //   documentSnapshot['postimage'].toString(),
+                  //   // fit: BoxFit.cover,
+                  // ),
+                  CachedNetworkImage(
+                imageUrl: documentSnapshot['postimage'].toString(),
               ),
             )
           : Center(
