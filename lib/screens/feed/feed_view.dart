@@ -83,7 +83,9 @@ class _FeedScreenState extends State<FeedScreen> {
         ],
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        // backgroundColor: kPrimaryColor,
+        backgroundColor: kPrimaryColor,
+        color: kSecondaryColor,
+        buttonBackgroundColor: kSecondaryColor,
         items: <Widget>[
           const Icon(Icons.home, size: 30),
           IconButton(

@@ -79,8 +79,10 @@ class _SignUpState extends State<SignUp> {
                               ),
                               hintText: 'Name',
                               hintStyle: TextStyle(
-                                  fontFamily: 'WorkSansSemiBold',
-                                  fontSize: 16.0),
+                                fontFamily: 'WorkSansSemiBold',
+                                fontSize: 16.0,
+                                color: Colors.black,
+                              ),
                             ),
                             onSubmitted: (_) {
                               focusNodeEmail.requestFocus();
@@ -112,8 +114,10 @@ class _SignUpState extends State<SignUp> {
                               ),
                               hintText: 'Email Address(ogr.akdeniz.edu.tr)',
                               hintStyle: TextStyle(
-                                  fontFamily: 'WorkSansSemiBold',
-                                  fontSize: 16.0),
+                                fontFamily: 'WorkSansSemiBold',
+                                fontSize: 16.0,
+                                color: Colors.black,
+                              ),
                             ),
                             onSubmitted: (_) {
                               focusNodePassword.requestFocus();
@@ -145,8 +149,10 @@ class _SignUpState extends State<SignUp> {
                               ),
                               hintText: 'Password',
                               hintStyle: const TextStyle(
-                                  fontFamily: 'WorkSansSemiBold',
-                                  fontSize: 16.0),
+                                fontFamily: 'WorkSansSemiBold',
+                                fontSize: 16.0,
+                                color: Colors.black,
+                              ),
                               suffixIcon: GestureDetector(
                                 onTap: _toggleSignup,
                                 child: Icon(
@@ -188,8 +194,10 @@ class _SignUpState extends State<SignUp> {
                               ),
                               hintText: 'Confirmation',
                               hintStyle: const TextStyle(
-                                  fontFamily: 'WorkSansSemiBold',
-                                  fontSize: 16.0),
+                                fontFamily: 'WorkSansSemiBold',
+                                fontSize: 16.0,
+                                color: Colors.black,
+                              ),
                               suffixIcon: GestureDetector(
                                 onTap: _toggleSignupConfirm,
                                 child: Icon(

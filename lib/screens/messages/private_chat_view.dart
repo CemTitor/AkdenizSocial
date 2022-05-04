@@ -80,7 +80,6 @@ class PrivateChat extends StatelessWidget {
 
   AnimatedContainer MessagesPart(BuildContext context) {
     return AnimatedContainer(
-      color: Colors.white,
       duration: const Duration(seconds: 5),
       curve: Curves.bounceOut,
       height: context.dynamicHeight(0.5),

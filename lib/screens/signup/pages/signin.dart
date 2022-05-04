@@ -57,9 +57,10 @@ class _SignInState extends State<SignIn> {
                           controller: loginEmailController,
                           keyboardType: TextInputType.emailAddress,
                           style: const TextStyle(
-                              fontFamily: 'WorkSansSemiBold',
-                              fontSize: 16.0,
-                              color: Colors.black),
+                            fontFamily: 'WorkSansSemiBold',
+                            fontSize: 16.0,
+                            color: Colors.black,
+                          ),
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
@@ -69,7 +70,10 @@ class _SignInState extends State<SignIn> {
                             ),
                             hintText: 'Email Address',
                             hintStyle: TextStyle(
-                                fontFamily: 'WorkSansSemiBold', fontSize: 17.0),
+                              fontFamily: 'WorkSansSemiBold',
+                              fontSize: 17.0,
+                              color: Colors.black,
+                            ),
                           ),
                           onSubmitted: (_) {
                             focusNodePassword.requestFocus();
@@ -89,9 +93,10 @@ class _SignInState extends State<SignIn> {
                           controller: loginPasswordController,
                           obscureText: _obscureTextPassword,
                           style: const TextStyle(
-                              fontFamily: 'WorkSansSemiBold',
-                              fontSize: 16.0,
-                              color: Colors.black),
+                            fontFamily: 'WorkSansSemiBold',
+                            fontSize: 16.0,
+                            color: Colors.black,
+                          ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: const Icon(
@@ -101,7 +106,10 @@ class _SignInState extends State<SignIn> {
                             ),
                             hintText: 'Password',
                             hintStyle: const TextStyle(
-                                fontFamily: 'WorkSansSemiBold', fontSize: 17.0),
+                              fontFamily: 'WorkSansSemiBold',
+                              fontSize: 17.0,
+                              color: Colors.black,
+                            ),
                             suffixIcon: GestureDetector(
                               onTap: _toggleLogin,
                               child: Icon(
