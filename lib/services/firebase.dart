@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,10 +55,10 @@ class FirebaseOpertrations with ChangeNotifier {
     return FirebaseFirestore.instance.collection('posts').doc(postId).set(data);
   }
 
-  Future deleteUserData(String useruid, String collection) async {
+  Future deleteUserData(String postId, String collection) async {
     return FirebaseFirestore.instance
         .collection(collection)
-        .doc(useruid)
+        .doc(postId)
         .delete();
   }
 

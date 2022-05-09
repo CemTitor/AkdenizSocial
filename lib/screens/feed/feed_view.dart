@@ -14,18 +14,31 @@ import 'package:senior_design_project/screens/user_profile/user_profile_view.dar
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/services/page_controller.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class FeedScreen extends StatefulWidget {
   @override
   _FeedScreenState createState() => _FeedScreenState();
 }
 
-class _FeedScreenState extends State<FeedScreen> {
+class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
+  late AnimationController controller;
+
   @override
   void initState() {
     Provider.of<FirebaseOpertrations>(context, listen: false)
         .initUserData(context);
+
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
     super.initState();
+  }
+
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,10 +72,11 @@ class _FeedScreenState extends State<FeedScreen> {
       // backgroundColor: kPrimaryColor,
       body: Column(
         children: [
-          Expanded(
-            flex: 1,
-            child: storyPart(context),
-          ),
+          //TODO story kısmı
+          // Expanded(
+          //   flex: 1,
+          //   child: storyPart(context),
+          // ),
           Expanded(
             flex: 7,
             child: StreamBuilder<QuerySnapshot>(
@@ -70,10 +84,18 @@ class _FeedScreenState extends State<FeedScreen> {
                   .fetchPostsByTime(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return RefreshProgressIndicator(
-                    semanticsLabel: 'asdsa',
-                    color: Colors.blue,
+                  return SpinKitSquareCircle(
+                    color: Colors.orange,
+                    size: 50.0,
+                    controller: controller,
                   );
+                  // return Center(
+                  //   child: RefreshProgressIndicator(
+                  //     semanticsLabel: 'asdsa',
+                  //     color: Colors.orange,
+                  //     strokeWidth: 5,
+                  //   ),
+                  // );
                 } else {
                   return stackPost(context, snapshot);
                 }
@@ -141,15 +163,19 @@ class _FeedScreenState extends State<FeedScreen> {
       children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
         Provider.of<PostFunctions>(context, listen: false)
             .showTimeAgo(documentSnapshot['time'] as Timestamp);
-        return Padding(
-          padding: context.paddingAllow,
-          child: Stack(
-            alignment: Alignment.topLeft,
-            children: <Widget>[
-              PostImage(context, documentSnapshot),
-              PostTopPart(documentSnapshot, context),
-              PostBottomPart(documentSnapshot, context),
-            ],
+
+        return AspectRatio(
+          aspectRatio: 3 / 3, //not neccesary, just tried aspectratio widget.
+          child: Padding(
+            padding: context.paddingAllow,
+            child: Stack(
+              alignment: Alignment.topLeft,
+              children: <Widget>[
+                PostImage(context, documentSnapshot),
+                PostTopPart(documentSnapshot, context),
+                PostBottomPart(documentSnapshot, context),
+              ],
+            ),
           ),
         );
       }).toList(),
@@ -201,7 +227,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: Text('0'),
                     );
                   } else {
                     return Padding(
@@ -244,7 +270,10 @@ class _FeedScreenState extends State<FeedScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('0'),
+                      ),
                     );
                   } else {
                     return Padding(
@@ -352,7 +381,8 @@ class _FeedScreenState extends State<FeedScreen> {
                         Provider.of<PostFunctions>(context, listen: false)
                             .showPostOptions(
                           context,
-                          documentSnapshot['caption'].toString(),
+                          documentSnapshot.id,
+                          // documentSnapshot['caption'].toString(),
                         );
                       })
                   : Container(

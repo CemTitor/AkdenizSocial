@@ -5,7 +5,6 @@ import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 
 class FeedServices extends ChangeNotifier {
-
   Future addComment(BuildContext context, String postId, String comment) async {
     await FirebaseFirestore.instance
         .collection('posts')

@@ -38,6 +38,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SignUp()),
+
+        /// context(_) sayesinde diğer providerlarımda oluşan veya baska bir değeri de
+        /// ordan alabilceğimi düşünüyorum.
         ChangeNotifierProvider(create: (_) => SignIn()),
         ChangeNotifierProvider(create: (_) => Authentication()),
         ChangeNotifierProvider(create: (_) => FirebaseOpertrations()),
@@ -49,11 +52,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChatServices()),
         ChangeNotifierProvider(create: (_) => PrivateChatServices()),
         ChangeNotifierProvider(create: (_) => SearchServices()),
+        // Provider<SearchServices>(create: (context) => SearchServices()), //  denemek için
         ChangeNotifierProvider(create: (_) => PageControllerClass()),
         ChangeNotifierProvider(create: (_) => MyProfile()),
         ChangeNotifierProvider(create: (_) => PostFunctions()),
       ],
       child: MaterialApp(
+        // showPerformanceOverlay: true, //run the application in profile mode
         navigatorKey: AppRouter.navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'Akdeniz Social',
@@ -71,7 +76,6 @@ class MyApp extends StatelessWidget {
         // ),
         // home: HomeScreen(),
         initialRoute: 'welcome',
-
         routes: {
           'welcome': (context) => Welcome(),
           'login': (context) => const LoginPage(),
@@ -84,7 +88,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO: splash screen
 //TODO: posta tıklayınca posta gir (profilde)
 //TODO: chatboxta last messag göster
 //TODO: bildirim göster
