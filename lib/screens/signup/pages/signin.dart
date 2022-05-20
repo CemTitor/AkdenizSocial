@@ -215,15 +215,12 @@ class _SignInState extends State<SignIn> {
   }
 
   void _toggleSignInButton() {
-    CustomSnackBar(context, const Text('Login button pressed'));
     if (loginEmailController.text.isNotEmpty) {
       if (!EmailValidator.validate(loginEmailController.text)) {
         warningText(context, "Please enter a valid email");
-      }
-      // else if (!loginEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
-      //   warningText(context, 'You should use Akdeniz Ogrenci Mail');
-      // }
-      else {
+      } else if (!loginEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
+        warningText(context, 'You should use Akdeniz Ogrenci Mail');
+      } else {
         Provider.of<Authentication>(context, listen: false)
             .logIntoAccount(
                 loginEmailController.text, loginPasswordController.text)
@@ -233,6 +230,15 @@ class _SignInState extends State<SignIn> {
           // validation if the Credentials are correct
           if (Authentication.successLogin == true &&
               Authentication.verifiedMail == true) {
+            CustomSnackBar(
+              context,
+              Row(
+                children: [
+                  const Text('Logging into account'),
+                  CircularProgressIndicator(),
+                ],
+              ),
+            );
             Navigator.pushNamed(context, 'pageview');
           } else if (Authentication.verifiedMail == false) {
             warningText(

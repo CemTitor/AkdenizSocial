@@ -16,7 +16,7 @@ import 'package:senior_design_project/screens/welcome/welcome.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/services/page_controller.dart';
-import 'package:senior_design_project/services/upload_post_firebase.dart';
+import 'package:senior_design_project/screens/upload_post/upload_post_services.dart';
 import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
 import 'package:senior_design_project/theme2.dart';
 
@@ -88,9 +88,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO: posta tıklayınca posta gir (profilde)
-//TODO: chatboxta last messag göster
+//TODO: chatboxta last messag göster ?
 //TODO: bildirim göster
-//TODO:story
-//TODO: karanlık aydınlık mod için renkler
-//TODO: foto caption editleyince bozuluyor
+//TODO: foto caption editleyince bozuluyor,gece karanlık moduda aynı(change notifier)

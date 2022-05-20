@@ -8,7 +8,7 @@ import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
-import 'package:senior_design_project/services/upload_post_firebase.dart';
+import 'package:senior_design_project/screens/upload_post/upload_post_services.dart';
 
 import '../../services/page_controller.dart';
 
@@ -55,7 +55,7 @@ class UploadPostScreen extends StatelessWidget {
                       MaterialButton(
                         onPressed: () {
                           Provider.of<UploadPost>(context, listen: false)
-                              .pickuserPostImage(context, ImageSource.gallery);
+                              .pickUserPostImage(context, ImageSource.gallery);
                         },
                         child: Text(
                           "Gallery",
@@ -64,7 +64,7 @@ class UploadPostScreen extends StatelessWidget {
                       MaterialButton(
                         onPressed: () {
                           Provider.of<UploadPost>(context, listen: false)
-                              .pickuserPostImage(context, ImageSource.camera);
+                              .pickUserPostImage(context, ImageSource.camera);
                         },
                         child: Text(
                           "Camera",
@@ -193,6 +193,8 @@ Future<void> sharePost(BuildContext context) async {
           'time': Timestamp.now(),
           'useremail': Provider.of<FirebaseOpertrations>(context, listen: false)
               .getInitUserEmail,
+          'userimage': Provider.of<FirebaseOpertrations>(context, listen: false)
+              .getInitUserImage,
         }).whenComplete(() {
       FirebaseFirestore.instance
           .collection('users')

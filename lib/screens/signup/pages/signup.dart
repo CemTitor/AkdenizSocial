@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
+import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
 import 'package:senior_design_project/screens/signup/widgets/snackbar.dart';
 import 'package:senior_design_project/services/auth.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:senior_design_project/services/upload_post_firebase.dart';
 
 class SignUp extends StatefulWidget with ChangeNotifier {
   @override
@@ -269,7 +269,14 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _toggleSignUpButton() {
-    CustomSnackBar(context, const Text('SignUp button pressed'));
+    CustomSnackBar(
+        context,
+        Row(
+          children: [
+            const Text('You are taken to the confirmation screen'),
+            CircularProgressIndicator(),
+          ],
+        ));
     if (signupPasswordController.text.length < 6) {
       warningText(context, "Passwod cannot be less than 6 characters !");
     } else if (signupEmailController.text.isEmpty ||
@@ -277,11 +284,9 @@ class _SignUpState extends State<SignUp> {
       warningText(context, "Fill all feilds !");
     } else if (!EmailValidator.validate(signupEmailController.text)) {
       warningText(context, "Enter a valid Email");
-    }
-    // else if (!signupEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
-    //   warningText(context, 'You should use Akdeniz Ogrenci Mail');
-    // }
-    else if (signupPasswordController.text !=
+    } else if (!signupEmailController.text.endsWith('@ogr.akdeniz.edu.tr')) {
+      warningText(context, 'You should use Akdeniz Ogrenci Mail');
+    } else if (signupPasswordController.text !=
         signupConfirmPasswordController.text) {
       warningText(context, "Passwors has to be matched");
     } else if (signupEmailController.text.isNotEmpty) {
@@ -297,8 +302,8 @@ class _SignUpState extends State<SignUp> {
           'useremail': signupEmailController.text,
           'userpassword': signupPasswordController.text,
           'username': signupNameController.text,
-          'userimage':
-              Provider.of<UploadPost>(context, listen: false).getuserAvatarUrl
+          'userimage': Provider.of<MyProfileServices>(context, listen: false)
+              .getUserAvatarUrl
         });
       }).whenComplete(() {
         signupPasswordController.clear();

@@ -22,24 +22,24 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
-  late AnimationController controller;
+  // late AnimationController controller;
 
   @override
   void initState() {
     Provider.of<FirebaseOpertrations>(context, listen: false)
         .initUserData(context);
 
-    controller = AnimationController(
-      duration: Duration(seconds: 1),
-      vsync: this,
-    );
+    // controller = AnimationController(
+    //   duration: Duration(seconds: 1),
+    //   vsync: this,
+    // );
     super.initState();
   }
 
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  // void dispose() {
+  //   controller.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -84,18 +84,18 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                   .fetchPostsByTime(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return SpinKitSquareCircle(
-                    color: Colors.orange,
-                    size: 50.0,
-                    controller: controller,
-                  );
-                  // return Center(
-                  //   child: RefreshProgressIndicator(
-                  //     semanticsLabel: 'asdsa',
-                  //     color: Colors.orange,
-                  //     strokeWidth: 5,
-                  //   ),
+                  // return SpinKitSquareCircle(
+                  //   color: Colors.orange,
+                  //   size: 50.0,
+                  //   controller: controller,
                   // );
+                  return Center(
+                    child: RefreshProgressIndicator(
+                      semanticsLabel: 'asdsa',
+                      color: Colors.orange,
+                      strokeWidth: 5,
+                    ),
+                  );
                 } else {
                   return stackPost(context, snapshot);
                 }
@@ -343,13 +343,13 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                   child: Image(
                     height: 50.0,
                     width: 50.0,
-                    image: NetworkImage(
-                      Provider.of<FirebaseOpertrations>(
-                            context,
-                            listen: false,
-                          ).getInitUserImage ??
-                          "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
-                    ),
+                    image: NetworkImage(documentSnapshot['userimage'].toString()
+                        // Provider.of<FirebaseOpertrations>(
+                        //       context,
+                        //       listen: false,
+                        //     ).getInitUserImage ??
+                        //     "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                        ),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -200,7 +200,7 @@ Future createChatroomBottomSheet(BuildContext context) {
         padding: MediaQuery.of(context).viewInsets,
         child: Container(
           height: context.dynamicHeight(0.3),
-          color: Colors.amber,
+          // color: Colors.amber,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

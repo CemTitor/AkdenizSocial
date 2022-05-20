@@ -1,8 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
+import 'package:senior_design_project/constants(config)/context_extension.dart';
 import 'package:senior_design_project/screens/feed/feed_service.dart';
+import 'package:senior_design_project/screens/feed/postfunctions.dart';
 import 'package:senior_design_project/services/auth.dart';
+
+import '../../constants(config)/app_router.dart';
+import '../../services/firebase.dart';
+import '../user_profile/user_profile_view.dart';
 
 class PostScreen extends StatelessWidget {
   TextEditingController commentController = TextEditingController();
@@ -29,17 +37,17 @@ class PostScreen extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
+                // topLeft: Radius.circular(30.0),
+                // topRight: Radius.circular(30.0),
+                ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black12,
-                offset: Offset(0, -2),
-                blurRadius: 6.0,
-              ),
+                  // color: Colors.yellow,
+                  // offset: Offset(0, -2),
+                  // blurRadius: 6.0,
+                  ),
             ],
-            color: Colors.white,
+            // color: Colors.white,
           ),
           child: Padding(
             padding: EdgeInsets.all(12.0),
@@ -57,6 +65,7 @@ class PostScreen extends StatelessWidget {
                 ),
                 contentPadding: EdgeInsets.all(20.0),
                 hintText: 'Add a comment',
+                hintStyle: TextStyle(color: Colors.grey),
                 prefixIcon: Container(
                   margin: EdgeInsets.all(4.0),
                   width: 48.0,
@@ -115,7 +124,7 @@ class PostScreen extends StatelessWidget {
 
   Expanded commentList(BuildContext context) {
     return Expanded(
-      flex: 8,
+      // flex: 1,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -144,7 +153,7 @@ class PostScreen extends StatelessWidget {
                   children: snapshot.data!.docs
                       .map((DocumentSnapshot documentSnapshot) {
                     return Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
                       child: ListTile(
                         leading: Container(
                           width: 50.0,
@@ -153,7 +162,7 @@ class PostScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black45,
+                                // color: Colors.black45,
                                 offset: Offset(0, 2),
                                 blurRadius: 6.0,
                               ),
@@ -165,16 +174,15 @@ class PostScreen extends StatelessWidget {
                                   Provider.of<Authentication>(context,
                                           listen: false)
                                       .getUserid) {
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     PageTransition(
-                                //         child: UserProfile(
-                                //           userUid:
-                                //               documentSnapshot[
-                                //                   'useruid'],
-                                //         ),
-                                //         type: PageTransitionType
-                                //             .bottomToTop));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => UserProfile(
+                                      userUid: documentSnapshot['useruid']
+                                          .toString(),
+                                    ),
+                                  ),
+                                );
                               }
                             },
                             child: CircleAvatar(
@@ -194,8 +202,8 @@ class PostScreen extends StatelessWidget {
                         title: Text(
                           documentSnapshot['username'].toString(),
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryColor),
                         ),
                         subtitle: Text(
                           documentSnapshot['comment'].toString(),
@@ -204,7 +212,7 @@ class PostScreen extends StatelessWidget {
                           icon: Icon(
                             Icons.favorite_border,
                           ),
-                          color: Colors.grey,
+                          // color: Colors.grey,
                           onPressed: () => print('Like comment'),
                         ),
                       ),
@@ -221,56 +229,152 @@ class PostScreen extends StatelessWidget {
 
   Expanded postTitle(BuildContext context) {
     return Expanded(
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-            child: GestureDetector(
-              onTap: () {
-                if (snapshot['useruid'] !=
-                    Provider.of<Authentication>(context, listen: false)
-                        .getUserid) {
-                  // Navigator.pushReplacement(
-                  //     context,
-                  //     PageTransition(
-                  //         child: UserProfile(
-                  //           userUid:
-                  //               documentSnapshot[
-                  //                   'useruid'],
-                  //         ),
-                  //         type: PageTransitionType
-                  //             .bottomToTop));
-                }
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: 15.0,
-                backgroundImage: NetworkImage(
-                  snapshot['userimage'].toString(),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8),
-            child: Container(
-              child: Text(
-                snapshot['username'].toString(),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            child: Text(
-              snapshot['caption'].toString(),
-            ),
-          )
-        ],
+      flex: 2,
+      child: Padding(
+        padding: context.paddingAllow,
+        child: Stack(
+          // alignment: Alignment.topLeft,
+          children: <Widget>[
+            PostImage(context, snapshot),
+            PostTopPart(snapshot, context),
+          ],
+        ),
       ),
     );
   }
+}
+
+Positioned PostTopPart(
+    DocumentSnapshot<Object?> documentSnapshot, BuildContext context) {
+  // Provider.of<PostFunctions>(context, listen: false)
+  //     .showTimeAgo(documentSnapshot['time'] as Timestamp);
+  return Positioned(
+    child: Expanded(
+      child: ListTile(
+        hoverColor: Colors.yellow,
+        textColor: Colors.white,
+        leading: Container(
+          width: 50.0,
+          height: 50.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black45,
+                offset: Offset(0, 2),
+                blurRadius: 6.0,
+              ),
+            ],
+          ),
+          child: GestureDetector(
+            onTap: () {
+              if (documentSnapshot['useruid'] !=
+                  Provider.of<Authentication>(context, listen: false)
+                      .getUserid) {
+                AppRouter.push(
+                  UserProfile(
+                    userUid: documentSnapshot['useruid'].toString(),
+                  ),
+                );
+              }
+            },
+            child: CircleAvatar(
+              child: ClipOval(
+                child: Image(
+                  height: 50.0,
+                  width: 50.0,
+                  image: NetworkImage(
+                    Provider.of<FirebaseOpertrations>(
+                          context,
+                          listen: false,
+                        ).getInitUserImage ??
+                        "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+        title: Text(
+          documentSnapshot['caption'].toString(),
+        ),
+        subtitle: RichText(
+          text: TextSpan(
+              text: documentSnapshot['username'].toString(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+              children: <TextSpan>[
+                TextSpan(
+                  text:
+                      ' , ${Provider.of<PostFunctions>(context, listen: false).getImageTimePosted.toString()}',
+                  style: TextStyle(),
+                )
+              ]),
+        ),
+        // trailing: Icon(Icons.more_vert),
+        trailing:
+            Provider.of<Authentication>(context, listen: false).getUserid ==
+                    documentSnapshot['useruid']
+                ? IconButton(
+                    icon: Icon(Icons.more_vert),
+                    onPressed: () {
+                      Provider.of<PostFunctions>(context, listen: false)
+                          .showPostOptions(
+                        context,
+                        documentSnapshot.id,
+                        // documentSnapshot['caption'].toString(),
+                      );
+                    })
+                : Container(
+                    width: 0,
+                    height: 0,
+                  ),
+      ),
+    ),
+  );
+}
+
+InkWell PostImage(
+    BuildContext context, DocumentSnapshot<Object?> documentSnapshot) {
+  return InkWell(
+    onDoubleTap: () {
+      Provider.of<PostFunctions>(context, listen: false).addlike(
+          context,
+          documentSnapshot['caption'].toString(),
+          Provider.of<Authentication>(context, listen: false).getUserid);
+    },
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PostScreen(
+            snapshot: documentSnapshot,
+            docID: documentSnapshot['caption'].toString(),
+          ),
+        ),
+      );
+    },
+    child: (documentSnapshot['postimage'] != null)
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(20), // Image border
+            child:
+                // Image.network(
+                //   documentSnapshot['postimage'].toString(),
+                //   // fit: BoxFit.cover,
+                // ),
+                CachedNetworkImage(
+              imageUrl: documentSnapshot['postimage'].toString(),
+            ),
+          )
+        : Center(
+            child: SizedBox(
+              height: context.dynamicHeight(0.5),
+              width: context.dynamicWidth(0.5),
+              child: const RefreshProgressIndicator(
+                strokeWidth: 10,
+                color: Colors.yellow,
+              ),
+            ),
+          ),
+  );
 }

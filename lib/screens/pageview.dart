@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/screens/feed/feed_view.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
-import 'package:senior_design_project/screens/upload_post/upload_post_widget.dart';
+import 'package:senior_design_project/screens/upload_post/upload_post_view.dart';
 import 'package:senior_design_project/services/firebase.dart';
 import 'package:senior_design_project/services/page_controller.dart';
 
