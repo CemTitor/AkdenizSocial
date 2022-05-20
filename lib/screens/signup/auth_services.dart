@@ -1,6 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 
 class Authentication with ChangeNotifier {
@@ -49,12 +48,22 @@ class Authentication with ChangeNotifier {
         successSignup = true;
         notifyListeners();
       }
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       return null;
     }
   }
 
   Future logOutViaEmail() {
     return firebaseAuth.signOut();
+  }
+
+  Future createUserCollection(
+    BuildContext context,
+    Map<String, dynamic> data,
+  ) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(getUserid)
+        .set(data);
   }
 }

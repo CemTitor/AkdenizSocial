@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/screens/signup/pages/login.dart';
-import 'package:senior_design_project/services/auth.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -65,7 +65,7 @@ class MyProfileServices with ChangeNotifier {
                       .whenComplete(
                     () {
                       AppRouter.push(
-                        LoginPage(),
+                        const LoginPage(),
                       );
                     },
                   );

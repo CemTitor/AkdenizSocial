@@ -1,15 +1,16 @@
 import 'dart:io';
 
 //import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
+import 'package:senior_design_project/screens/upload_post/utils/counter_for_stepper.dart';
 
-class UploadPost with ChangeNotifier {
+class UploadPostServices with ChangeNotifier {
   TextEditingController captionController = TextEditingController();
   final picker = ImagePicker();
 
@@ -51,5 +52,9 @@ class UploadPost with ChangeNotifier {
       uploadPostImageURL = imageUrl;
     });
     notifyListeners();
+  }
+
+  Future uploadPostData(String postId, Map<String, dynamic> data) async {
+    return FirebaseFirestore.instance.collection('posts').doc(postId).set(data);
   }
 }

@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
-import 'package:senior_design_project/services/auth.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
 
 import '../../constants(config)/color_constant.dart';
-import '../../services/firebase.dart';
+import '../../services/initialize.dart';
 import '../feed/post_view.dart';
 
 class MyProfile extends StatelessWidget with ChangeNotifier {
@@ -498,7 +498,7 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                           .whenComplete(() {
                         Provider.of<MyProfileServices>(context, listen: false)
                             .updateUserAvatar(context);
-                        Provider.of<FirebaseOpertrations>(
+                        Provider.of<InitializeUser>(
                           context,
                           listen: false,
                         ).initUserData(context);

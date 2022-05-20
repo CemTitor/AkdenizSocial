@@ -6,10 +6,10 @@ import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../../services/auth.dart';
-import '../../services/firebase.dart';
+import '../signup/auth_services.dart';
+import '../../services/initialize.dart';
 
-class PostFunctions with ChangeNotifier {
+class PostServices with ChangeNotifier {
   TextEditingController commentContrller = TextEditingController();
   TextEditingController updatedCaptionController = TextEditingController();
 
@@ -24,7 +24,7 @@ class PostFunctions with ChangeNotifier {
     notifyListeners();
   }
 
-  showPostOptions(BuildContext context, String postId) {
+  Future showPostOptions(BuildContext context, String postId) {
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -77,10 +77,7 @@ class PostFunctions with ChangeNotifier {
                                           ),
                                           FloatingActionButton(
                                             onPressed: () {
-                                              Provider.of<FirebaseOpertrations>(
-                                                      context,
-                                                      listen: false)
-                                                  .updateCaption(postId, {
+                                              updateCaption(postId, {
                                                 'caption':
                                                     updatedCaptionController
                                                         .text
@@ -132,13 +129,10 @@ class PostFunctions with ChangeNotifier {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16.0)),
                                           onPressed: () {
-                                            Provider.of<FirebaseOpertrations>(
-                                                    context,
-                                                    listen: false)
-                                                .deleteUserData(postId, "posts")
+                                            deleteUserData(postId, "posts")
                                                 .whenComplete(
-                                                  () => Navigator.pop(context),
-                                                );
+                                              () => Navigator.pop(context),
+                                            );
                                           }),
                                     ],
                                   );
@@ -165,13 +159,13 @@ class PostFunctions with ChangeNotifier {
         .doc(subDocId)
         .set({
       'likes': FieldValue.increment(1),
-      'username': Provider.of<FirebaseOpertrations>(context, listen: false)
-          .getInitUserName,
+      'username':
+          Provider.of<InitializeUser>(context, listen: false).getInitUserName,
       'useruid': Provider.of<Authentication>(context, listen: false).getUserid,
-      'userimage': Provider.of<FirebaseOpertrations>(context, listen: false)
-          .getInitUserImage,
-      'useremail': Provider.of<FirebaseOpertrations>(context, listen: false)
-          .getInitUserEmail,
+      'userimage':
+          Provider.of<InitializeUser>(context, listen: false).getInitUserImage,
+      'useremail':
+          Provider.of<InitializeUser>(context, listen: false).getInitUserEmail,
       'time': Timestamp.now()
     });
   }
@@ -184,18 +178,18 @@ class PostFunctions with ChangeNotifier {
         .doc(comment)
         .set({
       'comment': comment,
-      'username': Provider.of<FirebaseOpertrations>(context, listen: false)
-          .getInitUserName,
+      'username':
+          Provider.of<InitializeUser>(context, listen: false).getInitUserName,
       'useruid': Provider.of<Authentication>(context, listen: false).getUserid,
-      'userimage': Provider.of<FirebaseOpertrations>(context, listen: false)
-          .getInitUserImage,
-      'useremail': Provider.of<FirebaseOpertrations>(context, listen: false)
-          .getInitUserEmail,
+      'userimage':
+          Provider.of<InitializeUser>(context, listen: false).getInitUserImage,
+      'useremail':
+          Provider.of<InitializeUser>(context, listen: false).getInitUserEmail,
       'time': Timestamp.now()
     });
   }
 
-  showlikes(BuildContext context, String postId) {
+  Future showlikes(BuildContext context, String postId) {
     return showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -303,5 +297,19 @@ class PostFunctions with ChangeNotifier {
                     topRight: Radius.circular(12.0))),
           );
         });
+  }
+
+  Future deleteUserData(String postId, String collection) async {
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .doc(postId)
+        .delete();
+  }
+
+  Future updateCaption(String postId, Map<String, dynamic> data) async {
+    return FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .update(data);
   }
 }

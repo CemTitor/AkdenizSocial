@@ -3,9 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
-import 'package:senior_design_project/screens/signup/widgets/snackbar.dart';
-import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/screens/signup/utils/snackbar.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
 import 'package:email_validator/email_validator.dart';
 
 class SignUp extends StatefulWidget with ChangeNotifier {
@@ -295,7 +294,7 @@ class _SignUpState extends State<SignUp> {
               signupEmailController.text, signupPasswordController.text)
           .whenComplete(() async {
         print("Creating collection");
-        await Provider.of<FirebaseOpertrations>(context, listen: false)
+        await Provider.of<Authentication>(context, listen: false)
             .createUserCollection(context, {
           'useruid':
               Provider.of<Authentication>(context, listen: false).getUserid,

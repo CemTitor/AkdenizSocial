@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
-import 'package:senior_design_project/screens/messages/private_chat_service.dart';
-import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/screens/messages/private_chat_services.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
+import 'package:senior_design_project/services/initialize.dart';
 
 import 'others/message.dart';
 import 'others/model/chat_message.dart';
@@ -15,7 +14,7 @@ final _firestore = FirebaseFirestore.instance;
 
 class PrivateChat extends StatelessWidget {
   PrivateChat({Key? key, required this.documentSnapshot}) : super(key: key);
-  final _auth = FirebaseAuth.instance;
+  // final _auth = FirebaseAuth.instance;
 
   TextEditingController messageControler = TextEditingController();
 
@@ -33,7 +32,7 @@ class PrivateChat extends StatelessWidget {
             BackButton(),
             CircleAvatar(
               backgroundImage: NetworkImage(
-                Provider.of<FirebaseOpertrations>(
+                Provider.of<InitializeUser>(
                       context,
                       listen: false,
                     ).getInitUserImage ??

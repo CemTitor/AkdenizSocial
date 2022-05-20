@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
-import 'package:senior_design_project/constants(config)/context_extension.dart';
 import 'package:senior_design_project/screens/chat/chats_services.dart';
 import 'package:senior_design_project/screens/messages/private_chat_view.dart';
-import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
+import 'package:senior_design_project/services/initialize.dart';
 
 class ChatsView extends StatelessWidget {
   const ChatsView({Key? key}) : super(key: key);
@@ -25,7 +24,7 @@ class ChatsView extends StatelessWidget {
               //   PrivateChat(documentSnapshot: ,),
               // );
             },
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
           ),
         ],
       ),
@@ -35,7 +34,7 @@ class ChatsView extends StatelessWidget {
           createChatroomBottomSheet(context);
         },
         backgroundColor: kSecondaryColor,
-        child: Icon(
+        child: const Icon(
           Icons.person_add_alt_1,
           color: Colors.white,
         ),
@@ -83,7 +82,7 @@ StreamBuilder<QuerySnapshot<Object?>> chatRoomList() {
                 // type: PageTransitionType.bottomToTop),
               },
               child: Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: kDefaultPadding,
                   vertical: kDefaultPadding * 0.75,
                 ),
@@ -94,7 +93,7 @@ StreamBuilder<QuerySnapshot<Object?>> chatRoomList() {
                         CircleAvatar(
                           radius: 24,
                           backgroundImage: NetworkImage(
-                            Provider.of<FirebaseOpertrations>(
+                            Provider.of<InitializeUser>(
                                   context,
                                   listen: false,
                                 ).getInitUserImage ??
@@ -130,13 +129,13 @@ StreamBuilder<QuerySnapshot<Object?>> chatRoomList() {
                           children: [
                             Text(
                               documentSnapshot['chatroomname'].toString(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(height: 8),
-                            Opacity(
+                            const SizedBox(height: 8),
+                            const Opacity(
                               opacity: 0.64,
                               // child: FutureBuilder<QuerySnapshot>(
                               //   future: FirebaseFirestore.instance
@@ -175,7 +174,9 @@ StreamBuilder<QuerySnapshot<Object?>> chatRoomList() {
                     Opacity(
                       opacity: 0.64,
                       child: Text(
-                        '${Provider.of<ChatServices>(context, listen: false).getImageTimePosted.toString()}',
+                        Provider.of<ChatServices>(context, listen: false)
+                            .getImageTimePosted
+                            .toString(),
                       ),
                     ),
                   ],
@@ -198,50 +199,45 @@ Future createChatroomBottomSheet(BuildContext context) {
     builder: (context) {
       return Padding(
         padding: MediaQuery.of(context).viewInsets,
-        child: Container(
-          height: context.dynamicHeight(0.3),
-          // color: Colors.amber,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                textAlign: TextAlign.center,
-                textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
-                  hintText: 'Enter Chatroom ID',
-                ),
-                controller: chatnameController,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextField(
+              textAlign: TextAlign.center,
+              textCapitalization: TextCapitalization.words,
+              decoration: const InputDecoration(
+                hintText: 'Enter Chatroom ID',
               ),
-              ElevatedButton(
-                child: const Text('Create Chatroom'),
-                onPressed: () {
-                  Provider.of<ChatServices>(context, listen: false)
-                      .submitChatroomData(chatnameController.text, {
-                    'chatroomname': chatnameController.text,
-                    'username': Provider.of<FirebaseOpertrations>(
-                      context,
-                      listen: false,
-                    ).initUserName,
-                    'userimage': Provider.of<FirebaseOpertrations>(
-                      context,
-                      listen: false,
-                    ).initUserImage,
-                    'useremail': Provider.of<FirebaseOpertrations>(
-                      context,
-                      listen: false,
-                    ).initUserEmail,
-                    'useruid':
-                        Provider.of<Authentication>(context, listen: false)
-                            .getUserid,
-                    'time': Timestamp.now()
-                  }).whenComplete(() {
-                    chatnameController.clear();
-                    Navigator.pop(context);
-                  });
-                },
-              )
-            ],
-          ),
+              controller: chatnameController,
+            ),
+            ElevatedButton(
+              child: const Text('Create Chatroom'),
+              onPressed: () {
+                Provider.of<ChatServices>(context, listen: false)
+                    .submitChatroomData(chatnameController.text, {
+                  'chatroomname': chatnameController.text,
+                  'username': Provider.of<InitializeUser>(
+                    context,
+                    listen: false,
+                  ).initUserName,
+                  'userimage': Provider.of<InitializeUser>(
+                    context,
+                    listen: false,
+                  ).initUserImage,
+                  'useremail': Provider.of<InitializeUser>(
+                    context,
+                    listen: false,
+                  ).initUserEmail,
+                  'useruid': Provider.of<Authentication>(context, listen: false)
+                      .getUserid,
+                  'time': Timestamp.now()
+                }).whenComplete(() {
+                  chatnameController.clear();
+                  Navigator.pop(context);
+                });
+              },
+            )
+          ],
         ),
       );
     },

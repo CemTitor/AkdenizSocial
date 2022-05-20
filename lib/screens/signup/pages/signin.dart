@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
-import 'package:senior_design_project/screens/signup/widgets/snackbar.dart';
-import 'package:senior_design_project/services/auth.dart';
+import 'package:senior_design_project/screens/signup/utils/snackbar.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
 
 class SignIn extends StatefulWidget with ChangeNotifier {
   SignIn({Key? key}) : super(key: key);

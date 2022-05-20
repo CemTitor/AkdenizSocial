@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
-import 'package:senior_design_project/screens/user_profile/user_profile_service.dart';
-import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/constants(config)/context_extension.dart';
+import 'package:senior_design_project/screens/user_profile/user_profile_services.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
+import 'package:senior_design_project/services/initialize.dart';
 
 class UserProfile extends StatelessWidget {
   final String userUid;
@@ -76,19 +77,16 @@ class UserProfile extends StatelessWidget {
                           Provider.of<Authentication>(context, listen: false)
                               .getUserid,
                           {
-                            'username': Provider.of<FirebaseOpertrations>(
-                                    context,
+                            'username': Provider.of<InitializeUser>(context,
                                     listen: false)
                                 .getInitUserName,
-                            'userimage': Provider.of<FirebaseOpertrations>(
-                                    context,
+                            'userimage': Provider.of<InitializeUser>(context,
                                     listen: false)
                                 .getInitUserImage,
                             'useruid': Provider.of<Authentication>(context,
                                     listen: false)
                                 .getUserid,
-                            'useremail': Provider.of<FirebaseOpertrations>(
-                                    context,
+                            'useremail': Provider.of<InitializeUser>(context,
                                     listen: false)
                                 .getInitUserEmail,
                             'time': Timestamp.now()
@@ -316,36 +314,37 @@ class UserProfile extends StatelessWidget {
 
 Future followedNotification(BuildContext context, String name) {
   return showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 150.0),
-                child: Divider(
-                  thickness: 4.0,
-                  color: Colors.black,
-                ),
+    context: context,
+    builder: (context) {
+      return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 150.0),
+              child: Divider(
+                thickness: 4.0,
+                color: Colors.black,
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text("You just Followed $name",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0)),
-              )
-            ],
-          ),
-          height: MediaQuery.of(context).size.height * 0.1,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: Colors.yellow, borderRadius: BorderRadius.circular(12.0)),
-        );
-      });
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text("You just Followed $name",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0)),
+            )
+          ],
+        ),
+        height: context.dynamicHeight(0.1),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+      );
+    },
+  );
 }
 
 Future checkFollowersSheet(BuildContext context, dynamic snapshot) {

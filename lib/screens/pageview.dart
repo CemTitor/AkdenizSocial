@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:senior_design_project/screens/feed/feed_view.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
 import 'package:senior_design_project/screens/upload_post/upload_post_view.dart';
-import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/services/initialize.dart';
 import 'package:senior_design_project/services/page_controller.dart';
 
 import 'chat/chats_view.dart';
@@ -24,8 +24,7 @@ class _AppPageViewState extends State<AppPageView> {
 
   @override
   void initState() {
-    Provider.of<FirebaseOpertrations>(context, listen: false)
-        .initUserData(context);
+    Provider.of<InitializeUser>(context, listen: false).initUserData(context);
 
     super.initState();
   }
@@ -72,23 +71,8 @@ class _AppPageViewState extends State<AppPageView> {
       children: <Widget>[
         UploadPostScreen(),
         FeedScreen(),
-        ChatsView(),
+        const ChatsView(),
       ],
     );
   }
 }
-
-// class Messages extends StatefulWidget {
-//   @override
-//   _MessagesState createState() => _MessagesState();
-// }
-//
-// class _MessagesState extends State<Messages> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: Colors.yellowAccent,
-//       child: const Center(child: Text('MESAJLAR')),
-//     );
-//   }
-// }

@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
-import 'package:senior_design_project/screens/feed/feed_service.dart';
-import 'package:senior_design_project/screens/feed/postfunctions.dart';
-import 'package:senior_design_project/services/auth.dart';
+import 'package:senior_design_project/screens/feed/feed_services.dart';
+import 'package:senior_design_project/screens/feed/post_services.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
 
 import '../../constants(config)/app_router.dart';
-import '../../services/firebase.dart';
 import '../user_profile/user_profile_view.dart';
 
 class PostScreen extends StatelessWidget {
@@ -24,7 +23,7 @@ class PostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yorumlar'),
+        title: const Text('Yorumlar'),
       ),
       body: Column(
         children: <Widget>[
@@ -35,7 +34,7 @@ class PostScreen extends StatelessWidget {
       bottomNavigationBar: Transform.translate(
         offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
                 // topLeft: Radius.circular(30.0),
                 // topRight: Radius.circular(30.0),
@@ -108,7 +107,7 @@ class PostScreen extends StatelessWidget {
                         // notifyListeners();
                       });
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.send,
                       size: 25.0,
                     ),
@@ -126,7 +125,7 @@ class PostScreen extends StatelessWidget {
     return Expanded(
       // flex: 1,
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30.0),
@@ -158,7 +157,7 @@ class PostScreen extends StatelessWidget {
                         leading: Container(
                           width: 50.0,
                           height: 50.0,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
@@ -201,7 +200,7 @@ class PostScreen extends StatelessWidget {
                         ),
                         title: Text(
                           documentSnapshot['username'].toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: kPrimaryColor),
                         ),
@@ -209,10 +208,9 @@ class PostScreen extends StatelessWidget {
                           documentSnapshot['comment'].toString(),
                         ),
                         trailing: IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.favorite_border,
                           ),
-                          // color: Colors.grey,
                           onPressed: () => print('Like comment'),
                         ),
                       ),
@@ -283,13 +281,15 @@ Positioned PostTopPart(
                 child: Image(
                   height: 50.0,
                   width: 50.0,
-                  image: NetworkImage(
-                    Provider.of<FirebaseOpertrations>(
-                          context,
-                          listen: false,
-                        ).getInitUserImage ??
-                        "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
-                  ),
+                  image:
+                      // NetworkImage(
+                      //   Provider.of<InitializeUser>(
+                      //         context,
+                      //         listen: false,
+                      //       ).getInitUserImage ??
+                      //       "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                      // ),
+                      NetworkImage(documentSnapshot['userimage'].toString()),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -306,7 +306,7 @@ Positioned PostTopPart(
               children: <TextSpan>[
                 TextSpan(
                   text:
-                      ' , ${Provider.of<PostFunctions>(context, listen: false).getImageTimePosted.toString()}',
+                      ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
                   style: TextStyle(),
                 )
               ]),
@@ -318,7 +318,7 @@ Positioned PostTopPart(
                 ? IconButton(
                     icon: Icon(Icons.more_vert),
                     onPressed: () {
-                      Provider.of<PostFunctions>(context, listen: false)
+                      Provider.of<PostServices>(context, listen: false)
                           .showPostOptions(
                         context,
                         documentSnapshot.id,
@@ -338,7 +338,7 @@ InkWell PostImage(
     BuildContext context, DocumentSnapshot<Object?> documentSnapshot) {
   return InkWell(
     onDoubleTap: () {
-      Provider.of<PostFunctions>(context, listen: false).addlike(
+      Provider.of<PostServices>(context, listen: false).addlike(
           context,
           documentSnapshot['caption'].toString(),
           Provider.of<Authentication>(context, listen: false).getUserid);

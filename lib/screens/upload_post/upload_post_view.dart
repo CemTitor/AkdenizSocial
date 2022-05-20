@@ -5,9 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
-import 'package:senior_design_project/screens/upload_post/counter_for_stepper.dart';
-import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/screens/upload_post/utils/counter_for_stepper.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
+import 'package:senior_design_project/services/initialize.dart';
 import 'package:senior_design_project/screens/upload_post/upload_post_services.dart';
 
 import '../../services/page_controller.dart';
@@ -54,7 +54,8 @@ class UploadPostScreen extends StatelessWidget {
                     children: [
                       MaterialButton(
                         onPressed: () {
-                          Provider.of<UploadPost>(context, listen: false)
+                          Provider.of<UploadPostServices>(context,
+                                  listen: false)
                               .pickUserPostImage(context, ImageSource.gallery);
                         },
                         child: Text(
@@ -63,7 +64,8 @@ class UploadPostScreen extends StatelessWidget {
                       ),
                       MaterialButton(
                         onPressed: () {
-                          Provider.of<UploadPost>(context, listen: false)
+                          Provider.of<UploadPostServices>(context,
+                                  listen: false)
                               .pickUserPostImage(context, ImageSource.camera);
                         },
                         child: Text(
@@ -82,13 +84,14 @@ class UploadPostScreen extends StatelessWidget {
               isActive:
                   Provider.of<Counter>(context, listen: false).counter >= 1,
               title: Text('Confirm'),
-              content:
-                  (Provider.of<UploadPost>(context).getUploadPostImage == null)
-                      ? Text('Boş')
-                      : Image.file(
-                          Provider.of<UploadPost>(context, listen: false)
-                              .imageFile!,
-                        ),
+              content: (Provider.of<UploadPostServices>(context)
+                          .getUploadPostImage ==
+                      null)
+                  ? Text('Boş')
+                  : Image.file(
+                      Provider.of<UploadPostServices>(context, listen: false)
+                          .imageFile!,
+                    ),
             ),
             Step(
               state: Provider.of<Counter>(context, listen: false).counter > 2
@@ -99,12 +102,13 @@ class UploadPostScreen extends StatelessWidget {
               title: Text('Upload'),
               content: Column(
                 children: [
-                  if (Provider.of<UploadPost>(context).getUploadPostImage ==
+                  if (Provider.of<UploadPostServices>(context)
+                          .getUploadPostImage ==
                       null)
                     const Placeholder()
                   else
                     Image.file(
-                      Provider.of<UploadPost>(context, listen: false)
+                      Provider.of<UploadPostServices>(context, listen: false)
                           .imageFile!,
                     ),
                   TextField(
@@ -113,8 +117,9 @@ class UploadPostScreen extends StatelessWidget {
                     inputFormatters: [LengthLimitingTextInputFormatter(200)],
                     maxLengthEnforcement: MaxLengthEnforcement.enforced,
                     maxLength: 200,
-                    controller: Provider.of<UploadPost>(context, listen: false)
-                        .captionController,
+                    controller:
+                        Provider.of<UploadPostServices>(context, listen: false)
+                            .captionController,
                     decoration: const InputDecoration(
                       hintText: "Add a caption..",
                     ),
@@ -132,7 +137,7 @@ class UploadPostScreen extends StatelessWidget {
           currentStep: Provider.of<Counter>(context, listen: false).counter,
           onStepContinue: () {
             if (Provider.of<Counter>(context, listen: false).counter == 1) {
-              Provider.of<UploadPost>(context, listen: false)
+              Provider.of<UploadPostServices>(context, listen: false)
                   .uploadPostImageToFirebaseStorage()
                   .whenComplete(() {
                 Provider.of<Counter>(context, listen: false).increaseCounter();
@@ -172,28 +177,30 @@ class UploadPostScreen extends StatelessWidget {
 
 Future<void> sharePost(BuildContext context) async {
   {
-    Provider.of<UploadPost>(context, listen: false)
+    Provider.of<UploadPostServices>(context, listen: false)
         .uploadPostImageToFirebaseStorage();
-    Provider.of<FirebaseOpertrations>(context, listen: false).uploadPostData(
-        Provider.of<UploadPost>(context, listen: false).captionController.text,
+    Provider.of<UploadPostServices>(context, listen: false).uploadPostData(
+        Provider.of<UploadPostServices>(context, listen: false)
+            .captionController
+            .text,
         {
-          'caption': Provider.of<UploadPost>(context, listen: false)
+          'caption': Provider.of<UploadPostServices>(context, listen: false)
               .captionController
               .text,
-          'postimage': Provider.of<UploadPost>(context, listen: false)
+          'postimage': Provider.of<UploadPostServices>(context, listen: false)
               .getUploadPostImageUrl,
-          'username': Provider.of<FirebaseOpertrations>(
+          'username': Provider.of<InitializeUser>(
             context,
             listen: false,
           ).getInitUserName,
-          'userimage': Provider.of<FirebaseOpertrations>(context, listen: false)
+          'userimage': Provider.of<InitializeUser>(context, listen: false)
               .getInitUserImage,
           'useruid':
               Provider.of<Authentication>(context, listen: false).getUserid,
           'time': Timestamp.now(),
-          'useremail': Provider.of<FirebaseOpertrations>(context, listen: false)
+          'useremail': Provider.of<InitializeUser>(context, listen: false)
               .getInitUserEmail,
-          'userimage': Provider.of<FirebaseOpertrations>(context, listen: false)
+          'userimage': Provider.of<InitializeUser>(context, listen: false)
               .getInitUserImage,
         }).whenComplete(() {
       FirebaseFirestore.instance
@@ -201,19 +208,19 @@ Future<void> sharePost(BuildContext context) async {
           .doc(Provider.of<Authentication>(context, listen: false).getUserid)
           .collection('posts')
           .add({
-        'caption': Provider.of<UploadPost>(context, listen: false)
+        'caption': Provider.of<UploadPostServices>(context, listen: false)
             .captionController
             .text,
-        'postimage': Provider.of<UploadPost>(context, listen: false)
+        'postimage': Provider.of<UploadPostServices>(context, listen: false)
             .getUploadPostImageUrl,
-        'username': Provider.of<FirebaseOpertrations>(context, listen: false)
-            .getInitUserName,
-        'userimage': Provider.of<FirebaseOpertrations>(context, listen: false)
+        'username':
+            Provider.of<InitializeUser>(context, listen: false).getInitUserName,
+        'userimage': Provider.of<InitializeUser>(context, listen: false)
             .getInitUserImage,
         'useruid':
             Provider.of<Authentication>(context, listen: false).getUserid,
         'time': Timestamp.now(),
-        'useremail': Provider.of<FirebaseOpertrations>(context, listen: false)
+        'useremail': Provider.of<InitializeUser>(context, listen: false)
             .getInitUserEmail,
       });
     }).whenComplete(() {
@@ -221,8 +228,11 @@ Future<void> sharePost(BuildContext context) async {
           .pageController
           .nextPage(
               duration: Duration(seconds: 1), curve: Curves.easeInOutExpo);
-      Provider.of<UploadPost>(context, listen: false).captionController.clear();
+      Provider.of<UploadPostServices>(context, listen: false)
+          .captionController
+          .clear();
       Provider.of<Counter>(context, listen: false).resetCounter();
+      Provider.of<InitializeUser>(context, listen: false).initUserData(context);
     });
   }
 }

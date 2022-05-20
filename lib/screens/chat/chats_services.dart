@@ -7,7 +7,9 @@ class ChatServices with ChangeNotifier {
   String? get getImageTimePosted => imageTimePosted;
 
   Future submitChatroomData(
-      String chatroomName, Map<String, dynamic> chatroomData) async {
+    String chatroomName,
+    Map<String, dynamic> chatroomData,
+  ) async {
     return FirebaseFirestore.instance
         .collection('chatrooms')
         .doc(chatroomName)
@@ -15,8 +17,8 @@ class ChatServices with ChangeNotifier {
   }
 
   showTimeAgo(Timestamp timedata) {
-    Timestamp time = timedata;
-    DateTime dateTime = time.toDate();
+    final Timestamp time = timedata;
+    final DateTime dateTime = time.toDate();
     imageTimePosted = timeago.format(dateTime);
     print(imageTimePosted);
     notifyListeners();

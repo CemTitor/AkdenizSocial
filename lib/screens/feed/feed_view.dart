@@ -6,13 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
+import 'package:senior_design_project/screens/feed/feed_services.dart';
 import 'package:senior_design_project/screens/feed/post_view.dart';
-import 'package:senior_design_project/screens/feed/postfunctions.dart';
+import 'package:senior_design_project/screens/feed/post_services.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
 import 'package:senior_design_project/screens/search/search_view.dart';
 import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
-import 'package:senior_design_project/services/auth.dart';
-import 'package:senior_design_project/services/firebase.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
+import 'package:senior_design_project/services/initialize.dart';
 import 'package:senior_design_project/services/page_controller.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -26,8 +27,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    Provider.of<FirebaseOpertrations>(context, listen: false)
-        .initUserData(context);
+    Provider.of<InitializeUser>(context, listen: false).initUserData(context);
 
     // controller = AnimationController(
     //   duration: Duration(seconds: 1),
@@ -80,7 +80,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
           Expanded(
             flex: 7,
             child: StreamBuilder<QuerySnapshot>(
-              stream: Provider.of<FirebaseOpertrations>(context, listen: false)
+              stream: Provider.of<FeedServices>(context, listen: false)
                   .fetchPostsByTime(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -136,7 +136,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               radius: 35.0,
               backgroundColor: Colors.blueGrey,
               backgroundImage: NetworkImage(
-                Provider.of<FirebaseOpertrations>(
+                Provider.of<InitializeUser>(
                       context,
                       listen: false,
                     ).getInitUserImage ??
@@ -161,7 +161,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     return ListView(
       children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
-        Provider.of<PostFunctions>(context, listen: false)
+        Provider.of<PostServices>(context, listen: false)
             .showTimeAgo(documentSnapshot['time'] as Timestamp);
 
         return AspectRatio(
@@ -200,11 +200,11 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               padding: const EdgeInsets.only(left: 8.0),
               child: GestureDetector(
                 onLongPress: () {
-                  Provider.of<PostFunctions>(context, listen: false).showlikes(
+                  Provider.of<PostServices>(context, listen: false).showlikes(
                       context, documentSnapshot['caption'].toString());
                 },
                 onTap: () {
-                  Provider.of<PostFunctions>(context, listen: false).addlike(
+                  Provider.of<PostServices>(context, listen: false).addlike(
                       context,
                       documentSnapshot['caption'].toString(),
                       Provider.of<Authentication>(context, listen: false)
@@ -366,7 +366,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                 children: <TextSpan>[
                   TextSpan(
                     text:
-                        ' , ${Provider.of<PostFunctions>(context, listen: false).getImageTimePosted.toString()}',
+                        ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
                     style: TextStyle(),
                   )
                 ]),
@@ -378,7 +378,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                   ? IconButton(
                       icon: Icon(Icons.more_vert),
                       onPressed: () {
-                        Provider.of<PostFunctions>(context, listen: false)
+                        Provider.of<PostServices>(context, listen: false)
                             .showPostOptions(
                           context,
                           documentSnapshot.id,
@@ -398,7 +398,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       BuildContext context, DocumentSnapshot<Object?> documentSnapshot) {
     return InkWell(
       onDoubleTap: () {
-        Provider.of<PostFunctions>(context, listen: false).addlike(
+        Provider.of<PostServices>(context, listen: false).addlike(
             context,
             documentSnapshot['caption'].toString(),
             Provider.of<Authentication>(context, listen: false).getUserid);
