@@ -217,7 +217,16 @@ Future<void> sharePost(BuildContext context) async {
           .collection('users')
           .doc(Provider.of<Authentication>(context, listen: false).getUserid)
           .collection('posts')
-          .add({
+          .doc(
+            Provider.of<UploadPostServices>(context, listen: false)
+                .captionController
+                .text,
+          )
+
+          ///if we  dont use doc() in here, it gives the doc automatically so
+          ///when we are deleting this document, its documentId will be different in two different collection
+          ///and we can not delete the document from both collections(users and posts).
+          .set({
         'caption': Provider.of<UploadPostServices>(context, listen: false)
             .captionController
             .text,
@@ -233,6 +242,22 @@ Future<void> sharePost(BuildContext context) async {
         'useremail': Provider.of<InitializeUser>(context, listen: false)
             .getInitUserEmail,
       });
+      //     .add({
+      //   'caption': Provider.of<UploadPostServices>(context, listen: false)
+      //       .captionController
+      //       .text,
+      //   'postimage': Provider.of<UploadPostServices>(context, listen: false)
+      //       .getUploadPostImageUrl,
+      //   'username':
+      //       Provider.of<InitializeUser>(context, listen: false).getInitUserName,
+      //   'userimage': Provider.of<InitializeUser>(context, listen: false)
+      //       .getInitUserImage,
+      //   'useruid':
+      //       Provider.of<Authentication>(context, listen: false).getUserid,
+      //   'time': Timestamp.now(),
+      //   'useremail': Provider.of<InitializeUser>(context, listen: false)
+      //       .getInitUserEmail,
+      // });
     }).whenComplete(() {
       Provider.of<PageControllerClass>(context, listen: false)
           .pageController

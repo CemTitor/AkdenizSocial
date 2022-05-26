@@ -25,6 +25,10 @@ class PostServices with ChangeNotifier {
   }
 
   Future showPostOptions(BuildContext context, String postId) {
+    String? currentUserId = Provider.of<Authentication>(
+      context,
+      listen: false,
+    ).getUserid;
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -133,13 +137,10 @@ class PostServices with ChangeNotifier {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16.0)),
                                         onPressed: () {
-                                          deleteUserData(postId, "posts")
+                                          deleteDocument(postId, "posts")
                                               .whenComplete(() {
-                                            deleteFromUserCollection(
-                                              Provider.of<Authentication>(
-                                                context,
-                                                listen: false,
-                                              ).getUserid,
+                                            deleteDocumentNestedCollection(
+                                              currentUserId,
                                               postId,
                                               "users",
                                               "posts",
@@ -310,20 +311,20 @@ class PostServices with ChangeNotifier {
         });
   }
 
-  Future deleteUserData(String postId, String collection) async {
+  Future deleteDocument(String docId, String collection) async {
     return FirebaseFirestore.instance
         .collection(collection)
-        .doc(postId)
+        .doc(docId)
         .delete();
   }
 
-  Future deleteFromUserCollection(String? userId, String postId,
-      String collection1, String collection2) async {
+  Future deleteDocumentNestedCollection(String? firstDocId, String secondDocId,
+      String firstCollection, String secondCollection) async {
     return FirebaseFirestore.instance
-        .collection(collection1)
-        .doc(userId)
-        .collection(collection2)
-        .doc(postId)
+        .collection(firstCollection)
+        .doc(firstDocId)
+        .collection(secondCollection)
+        .doc(secondDocId)
         .delete();
   }
 

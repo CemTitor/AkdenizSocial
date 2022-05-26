@@ -161,6 +161,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     return ListView(
       children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+        //TODO: it give error timeago showin in here
         Provider.of<PostServices>(context, listen: false)
             .showTimeAgo(documentSnapshot['time'] as Timestamp);
 
@@ -309,87 +310,85 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     // Provider.of<PostFunctions>(context, listen: false)
     //     .showTimeAgo(documentSnapshot['time'] as Timestamp);
     return Positioned(
-      child: Expanded(
-        child: ListTile(
-          hoverColor: Colors.yellow,
-          textColor: Colors.white,
-          leading: Container(
-            width: 50.0,
-            height: 50.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black45,
-                  offset: Offset(0, 2),
-                  blurRadius: 6.0,
-                ),
-              ],
-            ),
-            child: GestureDetector(
-              onTap: () {
-                if (documentSnapshot['useruid'] !=
-                    Provider.of<Authentication>(context, listen: false)
-                        .getUserid) {
-                  AppRouter.push(
-                    UserProfile(
-                      userUid: documentSnapshot['useruid'].toString(),
-                    ),
-                  );
-                }
-              },
-              child: CircleAvatar(
-                child: ClipOval(
-                  child: Image(
-                    height: 50.0,
-                    width: 50.0,
-                    image: NetworkImage(documentSnapshot['userimage'].toString()
-                        // Provider.of<FirebaseOpertrations>(
-                        //       context,
-                        //       listen: false,
-                        //     ).getInitUserImage ??
-                        //     "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
-                        ),
-                    fit: BoxFit.cover,
+      child: ListTile(
+        hoverColor: Colors.yellow,
+        textColor: Colors.white,
+        leading: Container(
+          width: 50.0,
+          height: 50.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black45,
+                offset: Offset(0, 2),
+                blurRadius: 6.0,
+              ),
+            ],
+          ),
+          child: GestureDetector(
+            onTap: () {
+              if (documentSnapshot['useruid'] !=
+                  Provider.of<Authentication>(context, listen: false)
+                      .getUserid) {
+                AppRouter.push(
+                  UserProfile(
+                    userUid: documentSnapshot['useruid'].toString(),
                   ),
+                );
+              }
+            },
+            child: CircleAvatar(
+              child: ClipOval(
+                child: Image(
+                  height: 50.0,
+                  width: 50.0,
+                  image: NetworkImage(documentSnapshot['userimage'].toString()
+                      // Provider.of<FirebaseOpertrations>(
+                      //       context,
+                      //       listen: false,
+                      //     ).getInitUserImage ??
+                      //     "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                      ),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
-          title: Text(
-            documentSnapshot['caption'].toString(),
-          ),
-          subtitle: RichText(
-            text: TextSpan(
-                text: documentSnapshot['username'].toString(),
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                children: <TextSpan>[
-                  TextSpan(
-                    text:
-                        ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
-                    style: TextStyle(),
-                  )
-                ]),
-          ),
-          // trailing: Icon(Icons.more_vert),
-          trailing:
-              Provider.of<Authentication>(context, listen: false).getUserid ==
-                      documentSnapshot['useruid']
-                  ? IconButton(
-                      icon: Icon(Icons.more_vert),
-                      onPressed: () {
-                        Provider.of<PostServices>(context, listen: false)
-                            .showPostOptions(
-                          context,
-                          documentSnapshot.id,
-                          // documentSnapshot['caption'].toString(),
-                        );
-                      })
-                  : Container(
-                      width: 0,
-                      height: 0,
-                    ),
         ),
+        title: Text(
+          documentSnapshot['caption'].toString(),
+        ),
+        subtitle: RichText(
+          text: TextSpan(
+              text: documentSnapshot['username'].toString(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+              children: <TextSpan>[
+                TextSpan(
+                  text:
+                      ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
+                  style: TextStyle(),
+                )
+              ]),
+        ),
+        // trailing: Icon(Icons.more_vert),
+        trailing:
+            Provider.of<Authentication>(context, listen: false).getUserid ==
+                    documentSnapshot['useruid']
+                ? IconButton(
+                    icon: Icon(Icons.more_vert),
+                    onPressed: () {
+                      Provider.of<PostServices>(context, listen: false)
+                          .showPostOptions(
+                        context,
+                        documentSnapshot.id,
+                        // documentSnapshot['caption'].toString(),
+                      );
+                    })
+                : Container(
+                    width: 0,
+                    height: 0,
+                  ),
       ),
     );
   }

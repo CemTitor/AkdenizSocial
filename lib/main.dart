@@ -88,6 +88,5 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO: bildirim göster
-//TODO: foto caption editleyince bozuluyor,gece karanlık moduda aynı(change notifier)
-//TODO: bir class max 200 sayfa seklinde
+//TODO: notifications will be added
+//TODO: one class max 200 line of code.

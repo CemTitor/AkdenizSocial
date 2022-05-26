@@ -214,6 +214,7 @@ class PostScreen extends StatelessWidget {
       child: Padding(
         padding: context.paddingAllow,
         child: Stack(
+          ///dont use expanded in stack widget.
           // alignment: Alignment.topLeft,
           children: <Widget>[
             PostImage(context, snapshot),
@@ -225,91 +226,88 @@ class PostScreen extends StatelessWidget {
   }
 }
 
-Expanded PostTopPart(
+ListTile PostTopPart(
     DocumentSnapshot<Object?> documentSnapshot, BuildContext context) {
   // Provider.of<PostFunctions>(context, listen: false)
   //     .showTimeAgo(documentSnapshot['time'] as Timestamp);
-  return Expanded(
-    child: ListTile(
-      // hoverColor: Colors.yellow,
-      // textColor: Colors.white,
-      leading: Container(
-        width: 50.0,
-        height: 50.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              // color: Colors.black45,
-              offset: Offset(0, 2),
-              blurRadius: 6.0,
-            ),
-          ],
-        ),
-        child: GestureDetector(
-          onTap: () {
-            if (documentSnapshot['useruid'] !=
-                Provider.of<Authentication>(context, listen: false).getUserid) {
-              AppRouter.push(
-                UserProfile(
-                  userUid: documentSnapshot['useruid'].toString(),
-                ),
-              );
-            }
-          },
-          child: CircleAvatar(
-            child: ClipOval(
-              child: Image(
-                height: 50.0,
-                width: 50.0,
-                image:
-                    // NetworkImage(
-                    //   Provider.of<InitializeUser>(
-                    //         context,
-                    //         listen: false,
-                    //       ).getInitUserImage ??
-                    //       "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
-                    // ),
-                    NetworkImage(documentSnapshot['userimage'].toString()),
-                fit: BoxFit.cover,
+  return ListTile(
+    // hoverColor: Colors.yellow,
+    // textColor: Colors.white,
+    leading: Container(
+      width: 50.0,
+      height: 50.0,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            // color: Colors.black45,
+            offset: Offset(0, 2),
+            blurRadius: 6.0,
+          ),
+        ],
+      ),
+      child: GestureDetector(
+        onTap: () {
+          if (documentSnapshot['useruid'] !=
+              Provider.of<Authentication>(context, listen: false).getUserid) {
+            AppRouter.push(
+              UserProfile(
+                userUid: documentSnapshot['useruid'].toString(),
               ),
+            );
+          }
+        },
+        child: CircleAvatar(
+          child: ClipOval(
+            child: Image(
+              height: 50.0,
+              width: 50.0,
+              image:
+                  // NetworkImage(
+                  //   Provider.of<InitializeUser>(
+                  //         context,
+                  //         listen: false,
+                  //       ).getInitUserImage ??
+                  //       "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                  // ),
+                  NetworkImage(documentSnapshot['userimage'].toString()),
+              fit: BoxFit.cover,
             ),
           ),
         ),
       ),
-      title: Text(
-        documentSnapshot['caption'].toString(),
-      ),
-      subtitle: RichText(
-        text: TextSpan(
-            text: documentSnapshot['username'].toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-            children: <TextSpan>[
-              TextSpan(
-                text:
-                    ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
-                style: TextStyle(),
-              )
-            ]),
-      ),
-      // trailing: Icon(Icons.more_vert),
-      trailing: Provider.of<Authentication>(context, listen: false).getUserid ==
-              documentSnapshot['useruid']
-          ? IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {
-                Provider.of<PostServices>(context, listen: false)
-                    .showPostOptions(
-                  context,
-                  documentSnapshot.id,
-                  // documentSnapshot['caption'].toString(),
-                );
-              })
-          : Container(
-              width: 0,
-              height: 0,
-            ),
     ),
+    title: Text(
+      documentSnapshot['caption'].toString(),
+    ),
+    subtitle: RichText(
+      text: TextSpan(
+          text: documentSnapshot['username'].toString(),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+          children: <TextSpan>[
+            TextSpan(
+              text:
+                  ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
+              style: TextStyle(),
+            )
+          ]),
+    ),
+    // trailing: Icon(Icons.more_vert),
+    trailing: Provider.of<Authentication>(context, listen: false).getUserid ==
+            documentSnapshot['useruid']
+        ? IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              Provider.of<PostServices>(context, listen: false).showPostOptions(
+                context,
+                documentSnapshot.id,
+                // documentSnapshot['caption'].toString(),
+              );
+            })
+        : Container(
+            width: 0,
+            height: 0,
+          ),
   );
 }
 
