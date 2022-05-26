@@ -13,7 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'my_profile_view.dart';
 
 class MyProfileServices with ChangeNotifier {
-  late String userAvatarUrl;
+  late String userAvatarUrl = "";
   String get getUserAvatarUrl => userAvatarUrl;
   late UploadTask imageAvatarUploadTask;
   late File userAvatar;

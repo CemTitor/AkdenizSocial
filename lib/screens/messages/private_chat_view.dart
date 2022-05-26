@@ -66,6 +66,16 @@ class PrivateChat extends StatelessWidget {
             icon: Icon(Icons.videocam),
             onPressed: () {},
           ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              Provider.of<PrivateChatServices>(context, listen: false)
+                  .leaveGroupChat(
+                context,
+                documentSnapshot.id,
+              );
+            },
+          ),
         ],
       ),
       body: Column(

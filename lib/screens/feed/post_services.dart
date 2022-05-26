@@ -32,6 +32,10 @@ class PostServices with ChangeNotifier {
           return Container(
             height: MediaQuery.of(context).size.height * 0.1,
             width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0))),
             child: Column(
               children: [
                 Padding(
@@ -124,16 +128,27 @@ class PostServices with ChangeNotifier {
                                             Navigator.pop(context);
                                           }),
                                       MaterialButton(
-                                          child: Text("Yes",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0)),
-                                          onPressed: () {
-                                            deleteUserData(postId, "posts")
-                                                .whenComplete(
-                                              () => Navigator.pop(context),
+                                        child: Text("Yes",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16.0)),
+                                        onPressed: () {
+                                          deleteUserData(postId, "posts")
+                                              .whenComplete(() {
+                                            deleteFromUserCollection(
+                                              Provider.of<Authentication>(
+                                                context,
+                                                listen: false,
+                                              ).getUserid,
+                                              postId,
+                                              "users",
+                                              "posts",
                                             );
-                                          }),
+                                          }).whenComplete(
+                                            () => Navigator.pop(context),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                                 });
@@ -143,10 +158,6 @@ class PostServices with ChangeNotifier {
                 )
               ],
             ),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0))),
           );
         });
   }
@@ -302,6 +313,16 @@ class PostServices with ChangeNotifier {
   Future deleteUserData(String postId, String collection) async {
     return FirebaseFirestore.instance
         .collection(collection)
+        .doc(postId)
+        .delete();
+  }
+
+  Future deleteFromUserCollection(String? userId, String postId,
+      String collection1, String collection2) async {
+    return FirebaseFirestore.instance
+        .collection(collection1)
+        .doc(userId)
+        .collection(collection2)
         .doc(postId)
         .delete();
   }

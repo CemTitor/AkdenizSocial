@@ -71,7 +71,7 @@ class _AppPageViewState extends State<AppPageView> {
       children: <Widget>[
         UploadPostScreen(),
         FeedScreen(),
-        const ChatsView(),
+        const ChatsScreen(),
       ],
     );
   }

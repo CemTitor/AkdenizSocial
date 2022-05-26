@@ -88,6 +88,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO: chatboxta last messag göster ?
 //TODO: bildirim göster
 //TODO: foto caption editleyince bozuluyor,gece karanlık moduda aynı(change notifier)
+//TODO: bir class max 200 sayfa seklinde

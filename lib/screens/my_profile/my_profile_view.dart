@@ -12,6 +12,8 @@ import '../../services/initialize.dart';
 import '../feed/post_view.dart';
 
 class MyProfile extends StatelessWidget with ChangeNotifier {
+  bool isFollowingList = false;
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -117,6 +119,7 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
+                                      isFollowingList = true;
                                       checkFollowingSheet(context, snapshot);
                                     },
                                     child: Column(
@@ -168,49 +171,56 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      const Text(
-                                        "FOLLOWER",
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
+                                  GestureDetector(
+                                    onTap: () {
+                                      isFollowingList = false;
+                                      checkFollowingSheet(context, snapshot);
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        const Text(
+                                          "FOLLOWER",
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      StreamBuilder<QuerySnapshot>(
-                                        stream: FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(
-                                              snapshot.data['useruid']
-                                                  .toString(),
-                                            )
-                                            .collection('followers')
-                                            .snapshots(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          } else {
-                                            return Text(
-                                              snapshot.data!.docs.length
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ],
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        StreamBuilder<QuerySnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(
+                                                snapshot.data['useruid']
+                                                    .toString(),
+                                              )
+                                              .collection('followers')
+                                              .snapshots(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            } else {
+                                              return Text(
+                                                snapshot.data!.docs.length
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -304,11 +314,17 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
             ),
           ),
           child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(snapshot.data['useruid'].toString())
-                .collection('following')
-                .snapshots(),
+            stream: isFollowingList
+                ? FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(snapshot.data['useruid'].toString())
+                    .collection('following')
+                    .snapshots()
+                : FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(snapshot.data['useruid'].toString())
+                    .collection('followers')
+                    .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(

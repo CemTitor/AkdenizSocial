@@ -7,8 +7,8 @@ import 'package:senior_design_project/screens/messages/private_chat_view.dart';
 import 'package:senior_design_project/screens/signup/auth_services.dart';
 import 'package:senior_design_project/services/initialize.dart';
 
-class ChatsView extends StatelessWidget {
-  const ChatsView({Key? key}) : super(key: key);
+class ChatsScreen extends StatelessWidget {
+  const ChatsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -135,36 +135,36 @@ StreamBuilder<QuerySnapshot<Object?>> chatRoomList() {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            const Opacity(
+                            Opacity(
                               opacity: 0.64,
-                              // child: FutureBuilder<QuerySnapshot>(
-                              //   future: FirebaseFirestore.instance
-                              //       .collection('chatrooms')
-                              //       .doc(documentSnapshot.id)
-                              //       .collection('messages')
-                              //       .snapshots()
-                              //       .last, // async work
-                              //   builder: (BuildContext context,
-                              //       AsyncSnapshot<QuerySnapshot> snapshot) {
-                              //     switch (snapshot.connectionState) {
-                              //       case ConnectionState.waiting:
-                              //         return Text('Loading....');
-                              //       default:
-                              //         if (!snapshot.hasData)
-                              //           return Text(
-                              //             'Error: ${snapshot.error}',
-                              //           );
-                              //         else
-                              //           return Text(
-                              //             'Result: ${snapshot.data}',
-                              //           );
-                              //     }
-                              //   },
-                              // ),
-                              child: Text(
-                                "Last message :)",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('chatrooms')
+                                    .doc(documentSnapshot.id)
+                                    .collection('messages')
+                                    .orderBy('time', descending: true)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: Text("Error"),
+                                    );
+                                  } else if (snapshot
+                                              .data!.docs.first['username'] !=
+                                          null &&
+                                      snapshot.data!.docs.first['message'] !=
+                                          null) {
+                                    return Text(
+                                      "${snapshot.data!.docs.first['username']}: ${snapshot.data!.docs.first['message']}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    );
+                                  }
+                                  return Container(
+                                    height: 10,
+                                    width: 10,
+                                  );
+                                },
                               ),
                             ),
                           ],

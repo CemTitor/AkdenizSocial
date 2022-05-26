@@ -259,7 +259,6 @@ class _SignInState extends State<SignIn> {
         builder: (context) {
           return Container(
               decoration: BoxDecoration(
-                color: Colors.black,
                 borderRadius: BorderRadius.circular(15.0),
               ),
               height: MediaQuery.of(context).size.height * 0.1,
@@ -267,10 +266,7 @@ class _SignInState extends State<SignIn> {
               child: Center(
                 child: Text(
                   warning,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
               ));
         });

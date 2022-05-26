@@ -125,7 +125,16 @@ class UploadPostScreen extends StatelessWidget {
                     ),
                   ),
                   MaterialButton(
-                    onPressed: () => sharePost(context),
+                    onPressed: () {
+                      if (Provider.of<UploadPostServices>(
+                        context,
+                        listen: false,
+                      ).captionController.text.isEmpty) {
+                        warningText(context, 'Please enter caption');
+                      } else {
+                        sharePost(context);
+                      }
+                    },
                     child: const Text(
                       "Share",
                     ),
@@ -177,6 +186,7 @@ class UploadPostScreen extends StatelessWidget {
 
 Future<void> sharePost(BuildContext context) async {
   {
+    Provider.of<InitializeUser>(context, listen: false).initUserData(context);
     Provider.of<UploadPostServices>(context, listen: false)
         .uploadPostImageToFirebaseStorage();
     Provider.of<UploadPostServices>(context, listen: false).uploadPostData(
@@ -235,4 +245,24 @@ Future<void> sharePost(BuildContext context) async {
       Provider.of<InitializeUser>(context, listen: false).initUserData(context);
     });
   }
+}
+
+Future warningText(BuildContext context, String warning) {
+  return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: Text(
+                warning,
+                style: const TextStyle(
+                    fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
+            ));
+      });
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:senior_design_project/constants(config)/app_router.dart';
+import 'package:senior_design_project/screens/chat/chats_view.dart';
 import 'package:senior_design_project/screens/signup/auth_services.dart';
 import 'package:senior_design_project/services/initialize.dart';
 
@@ -104,9 +106,44 @@ class PrivateChatServices with ChangeNotifier {
       'time': Timestamp.now(),
       'useruid': Provider.of<Authentication>(context, listen: false).getUserid,
       'username':
-          Provider.of<InitializeUser>(context, listen: false).getInitUserEmail,
+          Provider.of<InitializeUser>(context, listen: false).getInitUserName,
       'userimage':
           Provider.of<InitializeUser>(context, listen: false).getInitUserImage,
     }).whenComplete(() => messageControler.clear());
+  }
+
+  leaveGroupChat(BuildContext context, String chatRoomName) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('leave $chatRoomName'),
+            actions: [
+              MaterialButton(
+                child: Text('no'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              MaterialButton(
+                child: Text('yes'),
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection('chatrooms')
+                      .doc(chatRoomName)
+                      .collection('members')
+                      .doc(Provider.of<Authentication>(context, listen: false)
+                          .getUserid)
+                      .delete()
+                      .whenComplete(() {
+                    AppRouter.push(
+                      ChatsScreen(),
+                    );
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 }

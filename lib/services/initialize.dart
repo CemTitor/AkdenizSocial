@@ -17,6 +17,8 @@ class InitializeUser with ChangeNotifier {
     return await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Authentication>(context, listen: false).getUserid)
+
+        ///this code(19) give us current user's firebase document id, for example: Hguy1PqVgjas23PfiBgWlx3n1
         .get()
         .then((doc) {
       if (kDebugMode) {

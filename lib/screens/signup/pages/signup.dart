@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -293,7 +294,9 @@ class _SignUpState extends State<SignUp> {
           .createAccount(
               signupEmailController.text, signupPasswordController.text)
           .whenComplete(() async {
-        print("Creating collection");
+        if (kDebugMode) {
+          print("Creating collection");
+        }
         await Provider.of<Authentication>(context, listen: false)
             .createUserCollection(context, {
           'useruid':
