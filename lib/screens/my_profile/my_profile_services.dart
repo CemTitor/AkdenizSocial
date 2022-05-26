@@ -81,6 +81,12 @@ class MyProfileServices with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Authentication>(context, listen: false).getUserid)
         .update({'userimage': getUserAvatarUrl})
+        .whenComplete(() {
+          FirebaseFirestore.instance
+              .collection('posts')
+              .doc("Cyyy")
+              .update({'userimage': getUserAvatarUrl});
+        })
         .then((value) => print("User Updated"))
         .catchError((error) => print("Failed to update user: $error"));
   }
@@ -112,5 +118,22 @@ class MyProfileServices with ChangeNotifier {
         ? Provider.of<MyProfile>(context, listen: false).showUserAvatar(context)
         : print('Image upload error');
     notifyListeners();
+  }
+
+  Future unFollowUser(String? myUid, String followingDocid) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(myUid)
+        .collection('following')
+        .doc(followingDocid)
+        .delete()
+        .whenComplete(() {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(followingDocid)
+          .collection('followers')
+          .doc(myUid)
+          .delete();
+    });
   }
 }

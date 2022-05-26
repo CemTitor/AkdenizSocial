@@ -8,6 +8,8 @@ import 'package:senior_design_project/screens/user_profile/user_profile_services
 import 'package:senior_design_project/screens/signup/auth_services.dart';
 import 'package:senior_design_project/services/initialize.dart';
 
+import '../my_profile/my_profile_services.dart';
+
 class UserProfile extends StatelessWidget {
   final String userUid;
 
@@ -394,6 +396,7 @@ Future checkFollowersSheet(BuildContext context, dynamic snapshot) {
                                 );
                               }
                             },
+                            //TODO: trailing part is for user_profile and my_profile will be unite
                             trailing: documentSnapshot['useruid'] ==
                                     Provider.of<Authentication>(context,
                                             listen: false)
@@ -404,8 +407,16 @@ Future checkFollowersSheet(BuildContext context, dynamic snapshot) {
                                   )
                                 : MaterialButton(
                                     onPressed: () {
-                                      /*Provider.of<FirebaseOpertrations>(context, listen: false)
-                                    .unFollowUser(userUid, followingDocid)*/
+                                      Provider.of<MyProfileServices>(
+                                        context,
+                                        listen: false,
+                                      ).unFollowUser(
+                                        Provider.of<Authentication>(
+                                          context,
+                                          listen: false,
+                                        ).getUserid,
+                                        documentSnapshot.id,
+                                      );
                                     },
                                     color: Colors.black,
                                     child: Text(
@@ -424,14 +435,6 @@ Future checkFollowersSheet(BuildContext context, dynamic snapshot) {
                             ),
                             title: Text(
                               documentSnapshot['username'].toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(
-                              documentSnapshot['useremail'].toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,

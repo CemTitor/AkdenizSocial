@@ -25,13 +25,4 @@ class ProfileServices with ChangeNotifier {
           .set(followerData);
     });
   }
-
-  Future unFollowUser(String followingUid, String followingDocid) async {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(followingUid)
-        .collection('followers')
-        .doc(followingDocid)
-        .delete();
-  }
 }

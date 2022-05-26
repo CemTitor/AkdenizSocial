@@ -9,6 +9,7 @@ import 'package:senior_design_project/screens/feed/post_services.dart';
 import 'package:senior_design_project/screens/signup/auth_services.dart';
 
 import '../../constants(config)/app_router.dart';
+import '../../services/initialize.dart';
 import '../user_profile/user_profile_view.dart';
 
 class PostScreen extends StatelessWidget {
@@ -69,7 +70,13 @@ class PostScreen extends StatelessWidget {
                     child: Image(
                       height: 48.0,
                       width: 48.0,
-                      image: AssetImage('imageurl'),
+                      image: NetworkImage(
+                        Provider.of<InitializeUser>(
+                              context,
+                              listen: false,
+                            ).getInitUserImage ??
+                            "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                      ),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -262,15 +269,7 @@ ListTile PostTopPart(
             child: Image(
               height: 50.0,
               width: 50.0,
-              image:
-                  // NetworkImage(
-                  //   Provider.of<InitializeUser>(
-                  //         context,
-                  //         listen: false,
-                  //       ).getInitUserImage ??
-                  //       "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
-                  // ),
-                  NetworkImage(documentSnapshot['userimage'].toString()),
+              image: NetworkImage(documentSnapshot['userimage'].toString()),
               fit: BoxFit.cover,
             ),
           ),

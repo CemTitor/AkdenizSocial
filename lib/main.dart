@@ -90,3 +90,4 @@ class MyApp extends StatelessWidget {
 
 //TODO: notifications will be added
 //TODO: one class max 200 line of code.
+//TODO: when user change profile photo,feed screns post image photo cant changed because firebase collections is not connected with theirself

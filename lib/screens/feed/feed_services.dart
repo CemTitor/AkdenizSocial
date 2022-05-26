@@ -25,6 +25,7 @@ class FeedServices extends ChangeNotifier {
   }
 
   Stream<QuerySnapshot> fetchPostsByTime() {
+    notifyListeners();
     return FirebaseFirestore.instance
         .collection('posts')
         .orderBy('time', descending: true)

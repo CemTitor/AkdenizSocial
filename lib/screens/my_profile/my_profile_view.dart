@@ -350,8 +350,19 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                             );
                           },
                           trailing: MaterialButton(
-                            onPressed: () {},
-                            color: Colors.black,
+                            onPressed: () {
+                              Provider.of<MyProfileServices>(
+                                context,
+                                listen: false,
+                              ).unFollowUser(
+                                Provider.of<Authentication>(
+                                  context,
+                                  listen: false,
+                                ).getUserid,
+                                documentSnapshot.id,
+                              );
+                            },
+                            color: kPrimaryColor,
                             child: const Text(
                               'Unfollow',
                               style: TextStyle(
@@ -370,15 +381,7 @@ class MyProfile extends StatelessWidget with ChangeNotifier {
                           title: Text(
                             documentSnapshot['username'].toString(),
                             style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Text(
-                            documentSnapshot['useremail'].toString(),
-                            style: const TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                             ),
