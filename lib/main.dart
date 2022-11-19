@@ -1,29 +1,28 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:senior_design_project/constants(config)/app_router.dart';
+import 'package:senior_design_project/constants(config)/theme.dart';
 import 'package:senior_design_project/screens/chat/chats_services.dart';
+import 'package:senior_design_project/screens/feed/feed_services.dart';
+import 'package:senior_design_project/screens/feed/feed_view.dart';
 import 'package:senior_design_project/screens/feed/post_services.dart';
 import 'package:senior_design_project/screens/messages/private_chat_services.dart';
-import 'package:senior_design_project/screens/feed/feed_view.dart';
-import 'package:senior_design_project/screens/feed/feed_services.dart';
+import 'package:senior_design_project/screens/my_profile/my_profile_services.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
 import 'package:senior_design_project/screens/pageview.dart';
 import 'package:senior_design_project/screens/search/search_services.dart';
+import 'package:senior_design_project/screens/signup/auth_services.dart';
 import 'package:senior_design_project/screens/signup/pages/login.dart';
+import 'package:senior_design_project/screens/signup/pages/signin.dart';
 import 'package:senior_design_project/screens/signup/pages/signup.dart';
 import 'package:senior_design_project/screens/signup/pages/verify.dart';
-import 'package:senior_design_project/screens/welcome/welcome.dart';
-import 'package:senior_design_project/screens/signup/auth_services.dart';
-import 'package:senior_design_project/services/initialize.dart';
-import 'package:senior_design_project/services/page_controller.dart';
 import 'package:senior_design_project/screens/upload_post/upload_post_services.dart';
 import 'package:senior_design_project/screens/upload_post/utils/counter_for_stepper.dart';
-import 'package:senior_design_project/constants(config)/theme.dart';
-
-import 'constants(config)/app_router.dart';
-import 'screens/my_profile/my_profile_services.dart';
-import 'screens/signup/pages/signin.dart';
-import 'screens/user_profile/user_profile_services.dart';
+import 'package:senior_design_project/screens/user_profile/user_profile_services.dart';
+import 'package:senior_design_project/screens/welcome/welcome.dart';
+import 'package:senior_design_project/services/initialize.dart';
+import 'package:senior_design_project/services/page_controller.dart';
 
 Future<void> main() async {
   //following tho method for firebase initiliazing

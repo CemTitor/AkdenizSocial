@@ -7,15 +7,14 @@ import 'package:senior_design_project/constants(config)/app_router.dart';
 import 'package:senior_design_project/constants(config)/color_constant.dart';
 import 'package:senior_design_project/constants(config)/context_extension.dart';
 import 'package:senior_design_project/screens/feed/feed_services.dart';
-import 'package:senior_design_project/screens/feed/post_view.dart';
 import 'package:senior_design_project/screens/feed/post_services.dart';
+import 'package:senior_design_project/screens/feed/post_view.dart';
 import 'package:senior_design_project/screens/my_profile/my_profile_view.dart';
 import 'package:senior_design_project/screens/search/search_view.dart';
-import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
 import 'package:senior_design_project/screens/signup/auth_services.dart';
+import 'package:senior_design_project/screens/user_profile/user_profile_view.dart';
 import 'package:senior_design_project/services/initialize.dart';
 import 'package:senior_design_project/services/page_controller.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class FeedScreen extends StatefulWidget {
   @override
@@ -55,7 +54,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                 delegate: CustomSearch(),
               );
             },
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
           ),
           IconButton(
             icon: const Icon(Icons.send),
@@ -63,8 +62,9 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               Provider.of<PageControllerClass>(context, listen: false)
                   .pageController
                   .nextPage(
-                      duration: Duration(seconds: 1),
-                      curve: Curves.easeInOutExpo);
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeInOutExpo,
+                  );
             },
           ),
         ],
@@ -89,7 +89,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                   //   size: 50.0,
                   //   controller: controller,
                   // );
-                  return Center(
+                  return const Center(
                     child: RefreshProgressIndicator(
                       semanticsLabel: 'asdsa',
                       color: Colors.orange,
@@ -116,8 +116,9 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               Provider.of<PageControllerClass>(context, listen: false)
                   .pageController
                   .previousPage(
-                      duration: Duration(seconds: 1),
-                      curve: Curves.easeInOutExpo);
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeInOutExpo,
+                  );
             },
           ),
           IconButton(
@@ -125,8 +126,9 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               Provider.of<PageControllerClass>(context, listen: false)
                   .pageController
                   .nextPage(
-                      duration: Duration(seconds: 1),
-                      curve: Curves.easeInOutExpo);
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeInOutExpo,
+                  );
             },
             icon: const Icon(Icons.chat_bubble),
           ),
@@ -158,7 +160,9 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   }
 
   Widget stackPost(
-      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    BuildContext context,
+    AsyncSnapshot<QuerySnapshot> snapshot,
+  ) {
     return ListView(
       children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
         //TODO: it give error timeago showin in here
@@ -172,9 +176,9 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
             child: Stack(
               alignment: Alignment.topLeft,
               children: <Widget>[
-                PostImage(context, documentSnapshot),
-                PostTopPart(documentSnapshot, context),
-                PostBottomPart(documentSnapshot, context),
+                postImage(context, documentSnapshot),
+                postTopPart(documentSnapshot, context),
+                postBottomPart(documentSnapshot, context),
               ],
             ),
           ),
@@ -183,8 +187,10 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     );
   }
 
-  Positioned PostBottomPart(
-      DocumentSnapshot<Object?> documentSnapshot, BuildContext context) {
+  Positioned postBottomPart(
+    DocumentSnapshot<Object?> documentSnapshot,
+    BuildContext context,
+  ) {
     return Positioned(
       bottom: 10,
       left: context.dynamicWidth(0.2),
@@ -202,47 +208,51 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               child: GestureDetector(
                 onLongPress: () {
                   Provider.of<PostServices>(context, listen: false).showlikes(
-                      context, documentSnapshot['caption'].toString());
+                    context,
+                    documentSnapshot['caption'].toString(),
+                  );
                 },
                 onTap: () {
                   Provider.of<PostServices>(context, listen: false).addlike(
-                      context,
-                      documentSnapshot['caption'].toString(),
-                      Provider.of<Authentication>(context, listen: false)
-                          .getUserid);
+                    context,
+                    documentSnapshot['caption'].toString(),
+                    Provider.of<Authentication>(context, listen: false)
+                        .getUserid,
+                  );
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.favorite_border,
                   size: 30.0,
                 ),
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('posts')
-                    .doc(
-                      documentSnapshot['caption'].toString(),
-                    )
-                    .collection('likes')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: Text('0'),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        snapshot.data!.docs.length.toString(),
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                        ),
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .doc(
+                    documentSnapshot['caption'].toString(),
+                  )
+                  .collection('likes')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: Text('0'),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      snapshot.data!.docs.length.toString(),
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
                       ),
-                    );
-                  }
-                }),
+                    ),
+                  );
+                }
+              },
+            ),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -255,47 +265,48 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                   ),
                 );
               },
-              child: Icon(
+              child: const Icon(
                 Icons.chat,
                 size: 30.0,
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('posts')
-                    .doc(
-                      documentSnapshot['caption'].toString(),
-                    )
-                    .collection('comments')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('0'),
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .doc(
+                    documentSnapshot['caption'].toString(),
+                  )
+                  .collection('comments')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('0'),
+                    ),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      snapshot.data!.docs.length.toString(),
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
                       ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        snapshot.data!.docs.length.toString(),
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    );
-                  }
-                }),
+                    ),
+                  );
+                }
+              },
+            ),
             IconButton(
-              icon: Icon(Icons.share),
+              icon: const Icon(Icons.share),
               iconSize: 30.0,
               onPressed: () => print('Share post'),
             ),
             IconButton(
-              icon: Icon(Icons.bookmark_border),
+              icon: const Icon(Icons.bookmark_border),
               iconSize: 30.0,
               onPressed: () => print('Save post'),
             ),
@@ -305,8 +316,10 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     );
   }
 
-  Positioned PostTopPart(
-      DocumentSnapshot<Object?> documentSnapshot, BuildContext context) {
+  Positioned postTopPart(
+    DocumentSnapshot<Object?> documentSnapshot,
+    BuildContext context,
+  ) {
     // Provider.of<PostFunctions>(context, listen: false)
     //     .showTimeAgo(documentSnapshot['time'] as Timestamp);
     return Positioned(
@@ -316,7 +329,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
         leading: Container(
           width: 50.0,
           height: 50.0,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -343,13 +356,14 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                 child: Image(
                   height: 50.0,
                   width: 50.0,
-                  image: NetworkImage(documentSnapshot['userimage'].toString()
-                      // Provider.of<FirebaseOpertrations>(
-                      //       context,
-                      //       listen: false,
-                      //     ).getInitUserImage ??
-                      //     "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
-                      ),
+                  image: NetworkImage(
+                    documentSnapshot['userimage'].toString(),
+                    // Provider.of<FirebaseOpertrations>(
+                    //       context,
+                    //       listen: false,
+                    //     ).getInitUserImage ??
+                    //     "https://www.solidbackgrounds.com/images/950x350/950x350-white-solid-color-background.jpg",
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -361,22 +375,23 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
         ),
         subtitle: RichText(
           text: TextSpan(
-              text: documentSnapshot['username'].toString(),
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-              children: <TextSpan>[
-                TextSpan(
-                  text:
-                      ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
-                  style: TextStyle(),
-                )
-              ]),
+            text: documentSnapshot['username'].toString(),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            children: <TextSpan>[
+              TextSpan(
+                text:
+                    ' , ${Provider.of<PostServices>(context, listen: false).getImageTimePosted.toString()}',
+                style: const TextStyle(),
+              )
+            ],
+          ),
         ),
         // trailing: Icon(Icons.more_vert),
         trailing:
             Provider.of<Authentication>(context, listen: false).getUserid ==
                     documentSnapshot['useruid']
                 ? IconButton(
-                    icon: Icon(Icons.more_vert),
+                    icon: const Icon(Icons.more_vert),
                     onPressed: () {
                       Provider.of<PostServices>(context, listen: false)
                           .showPostOptions(
@@ -384,8 +399,9 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                         documentSnapshot.id,
                         // documentSnapshot['caption'].toString(),
                       );
-                    })
-                : Container(
+                    },
+                  )
+                : const SizedBox(
                     width: 0,
                     height: 0,
                   ),
@@ -393,14 +409,17 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     );
   }
 
-  InkWell PostImage(
-      BuildContext context, DocumentSnapshot<Object?> documentSnapshot) {
+  InkWell postImage(
+    BuildContext context,
+    DocumentSnapshot<Object?> documentSnapshot,
+  ) {
     return InkWell(
       onDoubleTap: () {
         Provider.of<PostServices>(context, listen: false).addlike(
-            context,
-            documentSnapshot['caption'].toString(),
-            Provider.of<Authentication>(context, listen: false).getUserid);
+          context,
+          documentSnapshot['caption'].toString(),
+          Provider.of<Authentication>(context, listen: false).getUserid,
+        );
       },
       onTap: () {
         Navigator.push(
@@ -439,7 +458,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   }
 
   Widget storyPart(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.1,
       child: ListView.builder(
@@ -447,13 +466,13 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
         itemCount: stories.length,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
-            return SizedBox(width: 10.0);
+            return const SizedBox(width: 10.0);
           }
           return Container(
-            margin: EdgeInsets.all(10.0),
+            margin: const EdgeInsets.all(10.0),
             width: 60.0,
             height: 60.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(

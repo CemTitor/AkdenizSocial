@@ -160,7 +160,7 @@ StreamBuilder<QuerySnapshot<Object?>> chatRoomList() {
                                       overflow: TextOverflow.ellipsis,
                                     );
                                   }
-                                  return Container(
+                                  return const SizedBox(
                                     height: 10,
                                     width: 10,
                                   );
