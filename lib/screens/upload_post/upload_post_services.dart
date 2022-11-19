@@ -31,8 +31,8 @@ class UploadPostServices with ChangeNotifier {
   Future cropUserPostImage(BuildContext context, String filePath) async {
     final File? croppedImage = await ImageCropper().cropImage(
       sourcePath: filePath,
-      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-    );
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+    ) as File?;
     if (croppedImage != null) {
       imageFile = croppedImage;
       Provider.of<Counter>(context, listen: false).increaseCounter();

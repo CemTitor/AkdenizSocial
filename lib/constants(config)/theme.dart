@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'color_constant.dart';
+import 'package:senior_design_project/constants(config)/color_constant.dart';
 
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData.light().copyWith(
@@ -11,7 +11,7 @@ ThemeData lightThemeData(BuildContext context) {
     iconTheme: IconThemeData(color: kContentColorLightTheme),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorLightTheme),
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: kPrimaryColor,
       secondary: kSecondaryColor,
       error: kErrorColor,
